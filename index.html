@@ -1,365 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hellvape Hotspot Creative Board</title>
+<title>Hellvape Trend Radar</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#f8f9fa; color:#1a1a2e; line-height:1.6; }
-.container { max-width:1200px; margin:0 auto; padding:20px; }
-header { text-align:center; padding:40px 20px; background:#fff; border-radius:16px; margin-bottom:30px; box-shadow:0 2px 12px rgba(0,0,0,0.04); }
-header h1 { font-size:28px; font-weight:700; color:#1a1a2e; margin-bottom:8px; }
-header p { color:#6b7280; font-size:14px; }
-.header-stats { display:flex; gap:20px; justify-content:center; margin-top:20px; flex-wrap:wrap; }
-.stat { background:#f8f9fa; padding:12px 24px; border-radius:10px; text-align:center; }
-.stat .num { font-size:24px; font-weight:700; color:#1a1a2e; }
-.stat .label { font-size:12px; color:#9ca3af; text-transform:uppercase; letter-spacing:1px; }
-.platform-filter { display:flex; gap:10px; justify-content:center; margin:30px 0; flex-wrap:wrap; }
-.filter-btn { padding:8px 20px; border:1px solid #e5e7eb; border-radius:20px; background:#fff; cursor:pointer; font-size:14px; color:#4b5563; transition:all .2s; }
-.filter-btn:hover, .filter-btn.active { background:#1a1a2e; color:#fff; border-color:#1a1a2e; }
-.cards-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); gap:20px; }
-.card { background:#fff; border-radius:12px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); border:1px solid #f0f0f0; transition:transform .2s,box-shadow .2s; }
-.card:hover { transform:translateY(-2px); box-shadow:0 4px 20px rgba(0,0,0,0.1); }
-.card-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
-.platform-tag { display:inline-flex; align-items:center; gap:6px; padding:4px 12px; border-radius:16px; font-size:12px; font-weight:600; color:#fff; }
-.heat-stars { font-size:14px; letter-spacing:2px; }
-.views-badge { font-size:12px; color:#9ca3af; background:#f3f4f6; padding:3px 10px; border-radius:8px; }
-.card-title { font-size:17px; font-weight:600; color:#1a1a2e; margin-bottom:12px; }
-.card-proposal { font-size:14px; color:#4b5563; margin-bottom:8px; }
-.card-copy { font-size:13px; color:#6b7280; margin-bottom:16px; font-style:italic; }
-.view-link { display:inline-block; padding:8px 16px; background:#f0f0f0; color:#4b5563; text-decoration:none; border-radius:8px; font-size:13px; font-weight:500; transition:background .2s; }
-.view-link:hover { background:#e5e7eb; color:#1a1a2e; }
-.footer { text-align:center; padding:40px 20px; color:#9ca3af; font-size:13px; }
-.modal-overlay { position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);z-index:9999;display:none;justify-content:center;align-items:center;animation:fadeIn .25s ease; }
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
-.modal-box { width:90vw;height:80vh;background:#fff;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.15);display:flex;flex-direction:column;overflow:hidden;animation:slideUp .3s ease; }
-.modal-header { display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-bottom:1px solid #f0f0f0;background:#fafafa; }
-.modal-header h2 { font-size:16px;font-weight:600;color:#1a1a2e; }
-.modal-close { width:32px;height:32px;border-radius:8px;border:none;background:#f0f0f0;color:#6b7280;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s; }
-.modal-close:hover { background:#e5e7eb;color:#1a1a2e; }
-.modal-body { flex:1;position:relative; }
-.modal-body iframe { width:100%;height:100%;border:none; }
-.modal-loading { position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#9ca3af; }
-.modal-loading .spinner { width:32px;height:32px;border:3px solid #f0f0f0;border-top-color:#1a1a2e;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px; }
-@keyframes spin { to{transform:rotate(360deg)} }
-.modal-error { position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#6b7280; }
-.modal-error a { color:#1a1a2e;font-weight:500; }
-@media(max-width:768px){ .cards-grid{grid-template-columns:1fr} header h1{font-size:22px} .modal-box{width:98vw;height:95vh;border-radius:12px} }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f8f9fa;color:#1a1a2e;line-height:1.6}
+.container{max-width:1200px;margin:0 auto;padding:20px}
+header{text-align:center;padding:40px 20px;background:#fff;border-radius:16px;margin-bottom:30px;box-shadow:0 2px 12px rgba(0,0,0,0.04)}
+header h1{font-size:28px;font-weight:700;color:#1a1a2e;margin-bottom:8px}
+header p{color:#6b7280;font-size:14px}
+.filter-bar{display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+.filter-btn{padding:8px 20px;border-radius:20px;border:1px solid #e5e7eb;background:#fff;color:#4b5563;cursor:pointer;font-size:14px;transition:all .2s}
+.filter-btn:hover,.filter-btn.active{background:#1a1a2e;color:#fff;border-color:#1a1a2e}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
+.card{background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #f0f0f0;transition:transform .2s,box-shadow .2s;display:block!important}
+.card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,0.1)}
+.card-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.platform-tag{padding:4px 12px;border-radius:16px;font-size:12px;font-weight:600;color:#fff;display:inline-flex;align-items:center;gap:4px}
+.platform-tag.twitter{background:#1da1f2}.platform-tag.youtube{background:#ff0000}.platform-tag.instagram{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
+.heat{font-size:16px}
+.card-title{font-size:18px;font-weight:600;color:#1a1a2e;margin-bottom:12px}
+.card-proposal{font-size:14px;color:#4b5563;margin-bottom:8px;padding:12px;background:#f9fafb;border-radius:8px;border-left:3px solid #6b8fa3}
+.card-copy{font-size:13px;color:#6b7280;font-style:italic;margin:12px 0}
+.card-link{display:inline-block;padding:8px 16px;background:#1a1a2e;color:#fff;text-decoration:none;border-radius:8px;font-size:13px;transition:background .2s}
+.card-link:hover{background:#2d3748}
+.timestamp{text-align:center;color:#9ca3af;font-size:13px;margin-bottom:24px}
+@media(max-width:768px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="container">
 <header>
-    <h1>Hellvape Hotspot Creative Board</h1>
-    <p>Daily trending topics with brand-aligned creative proposals</p>
-    <p style="font-size:12px;color:#9ca3af;margin-top:4px;">Generated at 2026-07-25 23:29 ? 30 trends analyzed</p>
-    <div class="header-stats">
-        <div class="stat"><div class="num">30</div><div class="label">Trends</div></div>
-        <div class="stat"><div class="num">3</div><div class="label">Platforms</div></div>
-    </div>
+<h1>🔥 Hellvape Trend Radar</h1>
+<p>每天自动更新的蹭热点创意看板 · Built for Vapers</p>
+<div class="header-stats">
+<div class="stat"><div id="totalCount">0</div><div>Total Trends</div></div>
+<div class="stat"><div id="twitterCount">0</div><div>Twitter/X</div></div>
+<div class="stat"><div id="youtubeCount">0</div><div>YouTube</div></div>
+<div class="stat"><div id="instagramCount">0</div><div>Instagram</div></div>
+</div>
 </header>
-<div class="platform-filter">
-    <button class="filter-btn active" onclick="filterCards('all')">All Platforms (30)</button>
-    <button class="filter-btn" onclick="filterCards('Twitter/X')">Twitter/X</button>
-    <button class="filter-btn" onclick="filterCards('YouTube')">YouTube</button>
-    <button class="filter-btn" onclick="filterCards('Instagram')">Instagram</button>
+<div class="timestamp" id="timestamp"></div>
+<div class="filter-bar">
+<button class="filter-btn active" onclick="filterCards('all')">All Platforms (<span id="allCount">0</span>)</button>
+<button class="filter-btn" onclick="filterCards('Twitter/X')">Twitter/X</button>
+<button class="filter-btn" onclick="filterCards('YouTube')">YouTube</button>
+<button class="filter-btn" onclick="filterCards('Instagram')">Instagram</button>
 </div>
-<div class="cards-grid">
-<div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#1DA1F2">bird Twitter/X</span>
-            <span class="heat-stars">★★☆☆☆</span>
-        </div>
-        <h3 class="card-title">Trump 2028</h3>
-        <p class="card-proposal"><strong>?????</strong>反差梗/冷幽默风格适配</p>
-        <p class="card-copy"><em>?????</em> "When others chase, we build."</p>
-        <a href="#" onclick="openModal('https://x.com/search?q=Trump%202028'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#1DA1F2">bird Twitter/X</span>
-            <span class="heat-stars">★★★★☆</span>
-        </div>
-        <h3 class="card-title">#SmackDown</h3>
-        <p class="card-proposal"><strong>?????</strong>视觉融合：擂台摔角风x Dead Rabbit</p>
-        <p class="card-copy"><em>?????</em> "In the ring of vaping there is only one champion."</p>
-        <a href="#" onclick="openModal('https://x.com/search?q=%23SmackDown'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#1DA1F2">bird Twitter/X</span>
-            <span class="heat-stars">★★☆☆☆</span>
-        </div>
-        <h3 class="card-title">#WHCD</h3>
-        <p class="card-proposal"><strong>?????</strong>反差梗/冷幽默风格适配</p>
-        <p class="card-copy"><em>?????</em> "When others chase, we build."</p>
-        <a href="#" onclick="openModal('https://x.com/search?q=%23WHCD'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#1DA1F2">bird Twitter/X</span>
-            <span class="heat-stars">★★★★★</span>
-        </div>
-        <h3 class="card-title">#OPLive</h3>
-        <p class="card-proposal"><strong>?????</strong>玩家视角：电竞选手EDC装备展示</p>
-        <p class="card-copy"><em>?????</em> "Your main character gear. Peak performance every match."</p>
-        <a href="#" onclick="openModal('https://x.com/search?q=%23OPLive'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#1DA1F2">bird Twitter/X</span>
-            <span class="heat-stars">★★☆☆☆</span>
-        </div>
-        <h3 class="card-title">White House Correspondents</h3>
-        <p class="card-proposal"><strong>?????</strong>反差梗/冷幽默风格适配</p>
-        <p class="card-copy"><em>?????</em> "When others chase, we build."</p>
-        <a href="#" onclick="openModal('https://x.com/search?q=White%20House%20Correspondents'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#1DA1F2">bird Twitter/X</span>
-            <span class="heat-stars">★★☆☆☆</span>
-        </div>
-        <h3 class="card-title">#Eurovision</h3>
-        <p class="card-proposal"><strong>?????</strong>反差梗/冷幽默风格适配</p>
-        <p class="card-copy"><em>?????</em> "When others chase, we build."</p>
-        <a href="#" onclick="openModal('https://x.com/search?q=%23Eurovision'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#1DA1F2">bird Twitter/X</span>
-            <span class="heat-stars">★★☆☆☆</span>
-        </div>
-        <h3 class="card-title">Taylor Swift</h3>
-        <p class="card-proposal"><strong>?????</strong>反差梗/冷幽默风格适配</p>
-        <p class="card-copy"><em>?????</em> "When others chase, we build."</p>
-        <a href="#" onclick="openModal('https://x.com/search?q=Taylor%20Swift'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#1DA1F2">bird Twitter/X</span>
-            <span class="heat-stars">★★★★★</span>
-        </div>
-        <h3 class="card-title">#UFC350</h3>
-        <p class="card-proposal"><strong>?????</strong>视觉融合：格斗赛概念图式</p>
-        <p class="card-copy"><em>?????</em> "Champions dont follow trends. They set the standard."</p>
-        <a href="#" onclick="openModal('https://x.com/search?q=%23UFC350'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#1DA1F2">bird Twitter/X</span>
-            <span class="heat-stars">★★★★★</span>
-        </div>
-        <h3 class="card-title">Championship Finals</h3>
-        <p class="card-proposal"><strong>?????</strong>视觉融合：格斗赛概念图式</p>
-        <p class="card-copy"><em>?????</em> "Champions dont follow trends. They set the standard."</p>
-        <a href="#" onclick="openModal('https://x.com/search?q=Championship%20Finals'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#1DA1F2">bird Twitter/X</span>
-            <span class="heat-stars">★★★★★</span>
-        </div>
-        <h3 class="card-title">#AppleEvent</h3>
-        <p class="card-proposal"><strong>?????</strong>产品拟人：苹果发布会风格xDead Rabbit</p>
-        <p class="card-copy"><em>?????</em> "Welcome to the performance club. No keynote required."</p>
-        <a href="#" onclick="openModal('https://x.com/search?q=%23AppleEvent'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#FF0000">play YouTube</span>
-            <span class="heat-stars">★★★☆☆</span><span class="views-badge">200.5K views</span>
-        </div>
-        <h3 class="card-title">Saucy Santana - Quiet on the Creek [Official Music Video]</h3>
-        <p class="card-proposal"><strong>?????</strong>Reels式产品展示</p>
-        <p class="card-copy"><em>?????</em> "Built for players who push further."</p>
-        <a href="#" onclick="openModal('https://www.youtube.com/watch?v=MKl7uciEUE4'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#FF0000">play YouTube</span>
-            <span class="heat-stars">★★★★☆</span><span class="views-badge">1.7M views</span>
-        </div>
-        <h3 class="card-title">Lanterns | Official Trailer | HBO Max</h3>
-        <p class="card-proposal"><strong>?????</strong>反差梗：影视预告片风格主角换产品</p>
-        <p class="card-copy"><em>?????</em> "Something is rising. Built different."</p>
-        <a href="#" onclick="openModal('https://www.youtube.com/watch?v=7UIBOsuUwc4'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#FF0000">play YouTube</span>
-            <span class="heat-stars">★★★★★</span><span class="views-badge">1.1M views</span>
-        </div>
-        <h3 class="card-title">We Found Another Crazy Car Racing Game</h3>
-        <p class="card-proposal"><strong>?????</strong>视觉融合：F1赛车速度感</p>
-        <p class="card-copy"><em>?????</em> "Speed meets precision. Designed by racers."</p>
-        <a href="#" onclick="openModal('https://www.youtube.com/watch?v=Tij9cC64Pac'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#FF0000">play YouTube</span>
-            <span class="heat-stars">★★★☆☆</span><span class="views-badge">318.9K views</span>
-        </div>
-        <h3 class="card-title">Moneybagg Yo - I See Why (Official Video)</h3>
-        <p class="card-proposal"><strong>?????</strong>Reels式产品展示</p>
-        <p class="card-copy"><em>?????</em> "Built for players who push further."</p>
-        <a href="#" onclick="openModal('https://www.youtube.com/watch?v=YNwmYliuUfE'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#FF0000">play YouTube</span>
-            <span class="heat-stars">★★★★★</span><span class="views-badge">535.1K views</span>
-        </div>
-        <h3 class="card-title">Blade Runner 2099 - Official Teaser | Prime Video</h3>
-        <p class="card-proposal"><strong>?????</strong>视觉融合：赛博朋克风</p>
-        <p class="card-copy"><em>?????</em> "The future of flavor is already here."</p>
-        <a href="#" onclick="openModal('https://www.youtube.com/watch?v=0Dr8I_RyRCg'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#FF0000">play YouTube</span>
-            <span class="heat-stars">★★★☆☆</span><span class="views-badge">2.3M views</span>
-        </div>
-        <h3 class="card-title">Taylor Swift - The Fate of Strangers (Official Lyric Video)</h3>
-        <p class="card-proposal"><strong>?????</strong>Reels式产品展示</p>
-        <p class="card-copy"><em>?????</em> "Built for players who push further."</p>
-        <a href="#" onclick="openModal('https://www.youtube.com/watch?v=DylBH3uj6fo'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#FF0000">play YouTube</span>
-            <span class="heat-stars">★★★☆☆</span><span class="views-badge">4.8M views</span>
-        </div>
-        <h3 class="card-title">Every Project is Someone's First</h3>
-        <p class="card-proposal"><strong>?????</strong>Reels式产品展示</p>
-        <p class="card-copy"><em>?????</em> "Built for players who push further."</p>
-        <a href="#" onclick="openModal('https://www.youtube.com/watch?v=QrZMiS5mTnQ'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#FF0000">play YouTube</span>
-            <span class="heat-stars">★★★☆☆</span><span class="views-badge">890K views</span>
-        </div>
-        <h3 class="card-title">Inside Apple's New Product Lab</h3>
-        <p class="card-proposal"><strong>?????</strong>Reels式产品展示</p>
-        <p class="card-copy"><em>?????</em> "Built for players who push further."</p>
-        <a href="#" onclick="openModal('https://www.youtube.com/watch?v=xYzAbc123'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#FF0000">play YouTube</span>
-            <span class="heat-stars">★★★★★</span><span class="views-badge">42M views</span>
-        </div>
-        <h3 class="card-title">GTA VI Official Gameplay Trailer</h3>
-        <p class="card-proposal"><strong>?????</strong>视觉融合：游戏过场风格</p>
-        <p class="card-copy"><em>?????</em> "Next Level gear for the next generation."</p>
-        <a href="#" onclick="openModal('https://www.youtube.com/watch?v=gmneae5WOjc'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#FF0000">play YouTube</span>
-            <span class="heat-stars">★★★★★</span><span class="views-badge">1.2M views</span>
-        </div>
-        <h3 class="card-title">Why Everyone's Talking About AI Agents</h3>
-        <p class="card-proposal"><strong>?????</strong>热点二创：AI生成机械结构拆解视频</p>
-        <p class="card-copy"><em>?????</em> "Intelligence meets engineering."</p>
-        <a href="#" onclick="openModal('https://www.youtube.com/watch?v=demo123'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#E1306C">camera Instagram</span>
-            <span class="heat-stars">★★★★★</span>
-        </div>
-        <h3 class="card-title">viral</h3>
-        <p class="card-proposal"><strong>?????</strong>反差梗/Meme格式</p>
-        <p class="card-copy"><em>?????</em> "We dont follow trends. We set the pace."</p>
-        <a href="#" onclick="openModal('https://www.instagram.com/explore/tags/viral/'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#E1306C">camera Instagram</span>
-            <span class="heat-stars">★★★★★</span>
-        </div>
-        <h3 class="card-title">trending</h3>
-        <p class="card-proposal"><strong>?????</strong>反差梗/Meme格式</p>
-        <p class="card-copy"><em>?????</em> "We dont follow trends. We set the pace."</p>
-        <a href="#" onclick="openModal('https://www.instagram.com/explore/tags/trending/'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#E1306C">camera Instagram</span>
-            <span class="heat-stars">★★★★☆</span>
-        </div>
-        <h3 class="card-title">explore</h3>
-        <p class="card-proposal"><strong>?????</strong>POV格式：探索新 vs 升级设备</p>
-        <p class="card-copy"><em>?????</em> "Best discoveries are builds not places."</p>
-        <a href="#" onclick="openModal('https://www.instagram.com/explore/tags/explore/'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#E1306C">camera Instagram</span>
-            <span class="heat-stars">★★★★★</span>
-        </div>
-        <h3 class="card-title">fyp</h3>
-        <p class="card-proposal"><strong>?????</strong>Meme格式：FYP vs 真品味</p>
-        <p class="card-copy"><em>?????</em> "Your feed is loud. Your tank is loud enough."</p>
-        <a href="#" onclick="openModal('https://www.instagram.com/explore/tags/fyp/'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#E1306C">camera Instagram</span>
-            <span class="heat-stars">★★★★★</span>
-        </div>
-        <h3 class="card-title">reels</h3>
-        <p class="card-proposal"><strong>?????</strong>15秒Reels快节奏产品展示</p>
-        <p class="card-copy"><em>?????</em> "Click. Build. Vaporize."</p>
-        <a href="#" onclick="openModal('https://www.instagram.com/explore/tags/reels/'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#E1306C">camera Instagram</span>
-            <span class="heat-stars">★★★☆☆</span>
-        </div>
-        <h3 class="card-title">fashion</h3>
-        <p class="card-proposal"><strong>?????</strong>时尚大片但主角是设备</p>
-        <p class="card-copy"><em>?????</em> "The gear in your hand not clothes on you."</p>
-        <a href="#" onclick="openModal('https://www.instagram.com/explore/tags/fashion/'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#E1306C">camera Instagram</span>
-            <span class="heat-stars">★★☆☆☆</span>
-        </div>
-        <h3 class="card-title">food</h3>
-        <p class="card-proposal"><strong>?????</strong>通用标签玩法</p>
-        <p class="card-copy"><em>?????</em> "Trending now."</p>
-        <a href="#" onclick="openModal('https://www.instagram.com/explore/tags/food/'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#E1306C">camera Instagram</span>
-            <span class="heat-stars">★★☆☆☆</span>
-        </div>
-        <h3 class="card-title">travel</h3>
-        <p class="card-proposal"><strong>?????</strong>通用标签玩法</p>
-        <p class="card-copy"><em>?????</em> "Trending now."</p>
-        <a href="#" onclick="openModal('https://www.instagram.com/explore/tags/travel/'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#E1306C">camera Instagram</span>
-            <span class="heat-stars">★★☆☆☆</span>
-        </div>
-        <h3 class="card-title">fitness</h3>
-        <p class="card-proposal"><strong>?????</strong>通用标签玩法</p>
-        <p class="card-copy"><em>?????</em> "Trending now."</p>
-        <a href="#" onclick="openModal('https://www.instagram.com/explore/tags/fitness/'); return false;" class="view-link">???? -&gt;</a>
-    </div><div class="card">
-        <div class="card-header">
-            <span class="platform-tag" style="background:#E1306C">camera Instagram</span>
-            <span class="heat-stars">★★☆☆☆</span>
-        </div>
-        <h3 class="card-title">beauty</h3>
-        <p class="card-proposal"><strong>?????</strong>通用标签玩法</p>
-        <p class="card-copy"><em>?????</em> "Trending now."</p>
-        <a href="#" onclick="openModal('https://www.instagram.com/explore/tags/beauty/'); return false;" class="view-link">???? -&gt;</a>
-    </div>
-</div>
-<div class="footer"><p>Built for Hellvape | Built for Vapers | Born to Build</p></div>
-<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
-    <div class="modal-box">
-        <div class="modal-header">
-            <h2 id="modalTitle">Loading...</h2>
-            <button class="modal-close" onclick="closeModal()" title="Close">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="modal-loading" id="modalLoading"><div class="spinner"></div><div>Loading original page...</div></div>
-            <div class="modal-error" id="modalError" style="display:none"><p>This site blocks embedded viewing.</p><p style="margin-top:8px;"><a id="fallbackLink" href="#" target="_blank">Click here to open directly -&gt;</a></p></div>
-            <iframe id="modalIframe" src="" style="display:none"></iframe>
-        </div>
-    </div>
+<br>
+<div class="grid" id="cardGrid"></div>
 </div>
 <script>
-var allCards=JSON.parse('[{"platform": "Twitter/X", "title": "Trump 2028", "link": "https://x.com/search?q=Trump%202028", "emoji": "bird", "heat": "★★☆☆☆", "proposal": "反差梗/冷幽默风格适配", "copy": "When others chase, we build."}, {"platform": "Twitter/X", "title": "#SmackDown", "link": "https://x.com/search?q=%23SmackDown", "emoji": "bird", "heat": "★★★★☆", "proposal": "视觉融合：擂台摔角风x Dead Rabbit", "copy": "In the ring of vaping there is only one champion."}, {"platform": "Twitter/X", "title": "#WHCD", "link": "https://x.com/search?q=%23WHCD", "emoji": "bird", "heat": "★★☆☆☆", "proposal": "反差梗/冷幽默风格适配", "copy": "When others chase, we build."}, {"platform": "Twitter/X", "title": "#OPLive", "link": "https://x.com/search?q=%23OPLive", "emoji": "bird", "heat": "★★★★★", "proposal": "玩家视角：电竞选手EDC装备展示", "copy": "Your main character gear. Peak performance every match."}, {"platform": "Twitter/X", "title": "White House Correspondents", "link": "https://x.com/search?q=White%20House%20Correspondents", "emoji": "bird", "heat": "★★☆☆☆", "proposal": "反差梗/冷幽默风格适配", "copy": "When others chase, we build."}, {"platform": "Twitter/X", "title": "#Eurovision", "link": "https://x.com/search?q=%23Eurovision", "emoji": "bird", "heat": "★★☆☆☆", "proposal": "反差梗/冷幽默风格适配", "copy": "When others chase, we build."}, {"platform": "Twitter/X", "title": "Taylor Swift", "link": "https://x.com/search?q=Taylor%20Swift", "emoji": "bird", "heat": "★★☆☆☆", "proposal": "反差梗/冷幽默风格适配", "copy": "When others chase, we build."}, {"platform": "Twitter/X", "title": "#UFC350", "link": "https://x.com/search?q=%23UFC350", "emoji": "bird", "heat": "★★★★★", "proposal": "视觉融合：格斗赛概念图式", "copy": "Champions dont follow trends. They set the standard."}, {"platform": "Twitter/X", "title": "Championship Finals", "link": "https://x.com/search?q=Championship%20Finals", "emoji": "bird", "heat": "★★★★★", "proposal": "视觉融合：格斗赛概念图式", "copy": "Champions dont follow trends. They set the standard."}, {"platform": "Twitter/X", "title": "#AppleEvent", "link": "https://x.com/search?q=%23AppleEvent", "emoji": "bird", "heat": "★★★★★", "proposal": "产品拟人：苹果发布会风格xDead Rabbit", "copy": "Welcome to the performance club. No keynote required."}, {"platform": "YouTube", "title": "Saucy Santana - Quiet on the Creek [Official Music Video]", "link": "https://www.youtube.com/watch?v=MKl7uciEUE4", "emoji": "play", "heat": "★★★☆☆", "proposal": "Reels式产品展示", "copy": "Built for players who push further.", "views": "200.5K views"}, {"platform": "YouTube", "title": "Lanterns | Official Trailer | HBO Max", "link": "https://www.youtube.com/watch?v=7UIBOsuUwc4", "emoji": "play", "heat": "★★★★☆", "proposal": "反差梗：影视预告片风格主角换产品", "copy": "Something is rising. Built different.", "views": "1.7M views"}, {"platform": "YouTube", "title": "We Found Another Crazy Car Racing Game", "link": "https://www.youtube.com/watch?v=Tij9cC64Pac", "emoji": "play", "heat": "★★★★★", "proposal": "视觉融合：F1赛车速度感", "copy": "Speed meets precision. Designed by racers.", "views": "1.1M views"}, {"platform": "YouTube", "title": "Moneybagg Yo - I See Why (Official Video)", "link": "https://www.youtube.com/watch?v=YNwmYliuUfE", "emoji": "play", "heat": "★★★☆☆", "proposal": "Reels式产品展示", "copy": "Built for players who push further.", "views": "318.9K views"}, {"platform": "YouTube", "title": "Blade Runner 2099 - Official Teaser | Prime Video", "link": "https://www.youtube.com/watch?v=0Dr8I_RyRCg", "emoji": "play", "heat": "★★★★★", "proposal": "视觉融合：赛博朋克风", "copy": "The future of flavor is already here.", "views": "535.1K views"}, {"platform": "YouTube", "title": "Taylor Swift - The Fate of Strangers (Official Lyric Video)", "link": "https://www.youtube.com/watch?v=DylBH3uj6fo", "emoji": "play", "heat": "★★★☆☆", "proposal": "Reels式产品展示", "copy": "Built for players who push further.", "views": "2.3M views"}, {"platform": "YouTube", "title": "Every Project is Someone's First", "link": "https://www.youtube.com/watch?v=QrZMiS5mTnQ", "emoji": "play", "heat": "★★★☆☆", "proposal": "Reels式产品展示", "copy": "Built for players who push further.", "views": "4.8M views"}, {"platform": "YouTube", "title": "Inside Apple's New Product Lab", "link": "https://www.youtube.com/watch?v=xYzAbc123", "emoji": "play", "heat": "★★★☆☆", "proposal": "Reels式产品展示", "copy": "Built for players who push further.", "views": "890K views"}, {"platform": "YouTube", "title": "GTA VI Official Gameplay Trailer", "link": "https://www.youtube.com/watch?v=gmneae5WOjc", "emoji": "play", "heat": "★★★★★", "proposal": "视觉融合：游戏过场风格", "copy": "Next Level gear for the next generation.", "views": "42M views"}, {"platform": "YouTube", "title": "Why Everyone's Talking About AI Agents", "link": "https://www.youtube.com/watch?v=demo123", "emoji": "play", "heat": "★★★★★", "proposal": "热点二创：AI生成机械结构拆解视频", "copy": "Intelligence meets engineering.", "views": "1.2M views"}, {"platform": "Instagram", "title": "viral", "link": "https://www.instagram.com/explore/tags/viral/", "emoji": "camera", "heat": "★★★★★", "proposal": "反差梗/Meme格式", "copy": "We dont follow trends. We set the pace."}, {"platform": "Instagram", "title": "trending", "link": "https://www.instagram.com/explore/tags/trending/", "emoji": "camera", "heat": "★★★★★", "proposal": "反差梗/Meme格式", "copy": "We dont follow trends. We set the pace."}, {"platform": "Instagram", "title": "explore", "link": "https://www.instagram.com/explore/tags/explore/", "emoji": "camera", "heat": "★★★★☆", "proposal": "POV格式：探索新 vs 升级设备", "copy": "Best discoveries are builds not places."}, {"platform": "Instagram", "title": "fyp", "link": "https://www.instagram.com/explore/tags/fyp/", "emoji": "camera", "heat": "★★★★★", "proposal": "Meme格式：FYP vs 真品味", "copy": "Your feed is loud. Your tank is loud enough."}, {"platform": "Instagram", "title": "reels", "link": "https://www.instagram.com/explore/tags/reels/", "emoji": "camera", "heat": "★★★★★", "proposal": "15秒Reels快节奏产品展示", "copy": "Click. Build. Vaporize."}, {"platform": "Instagram", "title": "fashion", "link": "https://www.instagram.com/explore/tags/fashion/", "emoji": "camera", "heat": "★★★☆☆", "proposal": "时尚大片但主角是设备", "copy": "The gear in your hand not clothes on you."}, {"platform": "Instagram", "title": "food", "link": "https://www.instagram.com/explore/tags/food/", "emoji": "camera", "heat": "★★☆☆☆", "proposal": "通用标签玩法", "copy": "Trending now."}, {"platform": "Instagram", "title": "travel", "link": "https://www.instagram.com/explore/tags/travel/", "emoji": "camera", "heat": "★★☆☆☆", "proposal": "通用标签玩法", "copy": "Trending now."}, {"platform": "Instagram", "title": "fitness", "link": "https://www.instagram.com/explore/tags/fitness/", "emoji": "camera", "heat": "★★☆☆☆", "proposal": "通用标签玩法", "copy": "Trending now."}, {"platform": "Instagram", "title": "beauty", "link": "https://www.instagram.com/explore/tags/beauty/", "emoji": "camera", "heat": "★★☆☆☆", "proposal": "通用标签玩法", "copy": "Trending now."}]');
-function filterCards(platform){var cards=document.querySelectorAll('.card'),btns=document.querySelectorAll('.filter-btn');btns.forEach(function(b){b.classList.remove('active')});event.target.classList.add('active');cards.forEach(function(card){if(platform==='all'){card.style.display='';return}var hp=card.querySelector('.platform-tag').textContent.toLowerCase();card.style.display=hp.includes(platform.toLowerCase())?'':'none'})}
-var currentUrl='',currentTitle='';
-function openModal(url){currentUrl=url;var o=document.getElementById('modalOverlay'),l=document.getElementById('modalLoading'),e=document.getElementById('modalError'),f=document.getElementById('modalIframe'),t=document.getElementById('modalTitle');for(var i=0;i<allCards.length;i++){if(allCards[i].link===url){currentTitle=allCards[i].title;break}}l.style.display='block';e.style.display='none';f.style.display='none';t.textContent=currentTitle||'Preview';f.src=url;o.style.display='flex';document.body.style.overflow='hidden'}
-function closeModal(){var o=document.getElementById('modalOverlay'),f=document.getElementById('modalIframe');o.style.display='none';f.src='';document.body.style.overflow=''}
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal()})
+var allCards=[{"platform":"Twitter/X","title":"Trump 2028","link":"https://x.com/search?q=Trump%202028","emoji":"bird","heat":"★★☆☆☆","proposal":"反差梗/冷幽默风格适配","copy":"When others chase, we build."},{"platform":"Twitter/X","title":"#SmackDown","link":"https://x.com/search?q=%23SmackDown","emoji":"bird","heat":"★★★★☆","proposal":"视觉融合：擂台摔角风 x Dead Rabbit","copy":"In the ring of vaping there is only one champion."},{"platform":"Twitter/X","title":"#WHCD","link":"https://x.com/search?q=%23WHCD","emoji":"bird","heat":"★★☆☆☆","proposal":"反差梗/冷幽默风格适配","copy":"When others chase, we build."},{"platform":"Twitter/X","title":"#OPLive","link":"https://x.com/search?q=%23OPLive","emoji":"bird","heat":"★★★★★","proposal":"玩家视角：电竞选手EDC装备展示","copy":"Your main character gear. Peak performance every match."},{"platform":"Twitter/X","title":"White House Correspondents","link":"https://x.com/search?q=White%20House%20Correspondents","emoji":"bird","heat":"★★☆☆☆","proposal":"反差梗/冷幽默风格适配","copy":"When others chase, we build."},{"platform":"Twitter/X","title":"#Eurovision","link":"https://x.com/search?q=%23Eurovision","emoji":"bird","heat":"★★☆☆☆","proposal":"反差梗/冷幽默风格适配","copy":"When others chase, we build."},{"platform":"Twitter/X","title":"Taylor Swift","link":"https://x.com/search?q=Taylor%20Swift","emoji":"bird","heat":"★★☆☆☆","proposal":"反差梗/冷幽默风格适配","copy":"When others chase, we build."},{"platform":"Twitter/X","title":"#UFC350","link":"https://x.com/search?q=%23UFC350","emoji":"bird","heat":"★★★★★","proposal":"视觉融合：格斗赛概念图式","copy":"Champions dont follow trends. They set the standard."},{"platform":"Twitter/X","title":"Championship Finals","link":"https://x.com/search?q=Championship%20Finals","emoji":"bird","heat":"★★★★★","proposal":"视觉融合：格斗赛概念图式","copy":"Champions dont follow trends. They set the standard."},{"platform":"Twitter/X","title":"#AppleEvent","link":"https://x.com/search?q=%23AppleEvent","emoji":"bird","heat":"★★★★★","proposal":"产品拟人：苹果发布会风格 x Dead Rabbit","copy":"Welcome to the performance club. No keynote required."},{"platform":"YouTube","title":"Saucy Santana - Quiet on the Creek [Official Music Video]","link":"https://www.youtube.com/watch?v=MKl7uciEUE4","emoji":"play","heat":"★★★☆☆","proposal":"Reels式产品展示","copy":"Built for players who push further.","views":"200.5K views"},{"platform":"YouTube","title":"Lanterns | Official Trailer | HBO Max","link":"https://www.youtube.com/watch?v=7UIBOsuUwc4","emoji":"play","heat":"★★★★☆","proposal":"反差梗：影视预告片风格主角换产品","copy":"Something is rising. Built different.","views":"1.7M views"},{"platform":"YouTube","title":"We Found Another Crazy Car Racing Game","link":"https://www.youtube.com/watch?v=Tij9cC64Pac","emoji":"play","heat":"★★★★★","proposal":"视觉融合：F1赛车速度感","copy":"Speed meets precision. Designed by racers.","views":"1.1M views"},{"platform":"YouTube","title":"Moneybagg Yo - I See Why (Official Video)","link":"https://www.youtube.com/watch?v=YNwmYliuUfE","emoji":"play","heat":"★★★☆☆","proposal":"Reels式产品展示","copy":"Built for players who push further.","views":"318.9K views"},{"platform":"YouTube","title":"Blade Runner 2099 - Official Teaser | Prime Video","link":"https://www.youtube.com/watch?v=0Dr8I_RyRCg","emoji":"play","heat":"★★★★★","proposal":"视觉融合：赛博朋克风","copy":"The future of flavor is already here.","views":"535.1K views"},{"platform":"YouTube","title":"Taylor Swift - The Fate of Strangers (Official Lyric Video)","link":"https://www.youtube.com/watch?v=DylBH3uj6fo","emoji":"play","heat":"★★★☆☆","proposal":"Reels式产品展示","copy":"Built for players who push further.","views":"2.3M views"},{"platform":"YouTube","title":"Every Project is Someone's First","link":"https://www.youtube.com/watch?v=QrZMiS5mTnQ","emoji":"play","heat":"★★★☆☆","proposal":"Reels式产品展示","copy":"Built for players who push further.","views":"4.8M views"},{"platform":"YouTube","title":"Inside Apple's New Product Lab","link":"https://www.youtube.com/watch?v=xYzAbc123","emoji":"play","heat":"★★★☆☆","proposal":"Reels式产品展示","copy":"Built for players who push further.","views":"890K views"},{"platform":"YouTube","title":"GTA VI Official Gameplay Trailer","link":"https://www.youtube.com/watch?v=gmneae5WOjc","emoji":"play","heat":"★★★★★","proposal":"视觉融合：游戏过场风格","copy":"Next Level gear for the next generation.","views":"42M views"},{"platform":"YouTube","title":"Why Everyone's Talking About AI Agents","link":"https://www.youtube.com/watch?v=demo123","emoji":"play","heat":"★★★★★","proposal":"热点二创：AI生成机械结构拆解视频","copy":"Intelligence meets engineering.","views":"1.2M views"},{"platform":"Instagram","title":"viral","link":"https://www.instagram.com/explore/tags/viral/","emoji":"camera","heat":"★★★★★","proposal":"反差梗/Meme格式","copy":"We dont follow trends. We set the pace."},{"platform":"Instagram","title":"trending","link":"https://www.instagram.com/explore/tags/trending/","emoji":"camera","heat":"★★★★☆","proposal":"反差梗/Meme格式","copy":"We dont follow trends. We set the pace."},{"platform":"Instagram","title":"explore","link":"https://www.instagram.com/explore/tags/explore/","emoji":"camera","heat":"★★★★☆","proposal":"POV格式：探索新设备 vs 升级设备","copy":"Best discoveries are builds not places."},{"platform":"Instagram","title":"fyp","link":"https://www.instagram.com/explore/tags/fyp/","emoji":"camera","heat":"★★★★★","proposal":"Meme格式：FYP vs 真品味","copy":"Your feed is loud. Your tank is loud enough."},{"platform":"Instagram","title":"reels","link":"https://www.instagram.com/explore/tags/reels/","emoji":"camera","heat":"★★★★★","proposal":"15秒Reels快节奏产品展示","copy":"Click. Build. Vaporize."},{"platform":"Instagram","title":"fashion","link":"https://www.instagram.com/explore/tags/fashion/","emoji":"camera","heat":"★★★☆☆","proposal":"时尚大片但主角是设备","copy":"The gear in your hand not clothes on you."},{"platform":"Instagram","title":"food","link":"https://www.instagram.com/explore/tags/food/","emoji":"camera","heat":"★★☆☆☆","proposal":"通用标签玩法","copy":"Trending now."},{"platform":"Instagram","title":"travel","link":"https://www.instagram.com/explore/tags/travel/","emoji":"camera","heat":"★★☆☆☆","proposal":"通用标签玩法","copy":"Trending now."},{"platform":"Instagram","title":"fitness","link":"https://www.instagram.com/explore/tags/fitness/","emoji":"camera","heat":"★★☆☆☆","proposal":"通用标签玩法","copy":"Trending now."},{"platform":"Instagram","title":"beauty","link":"https://www.instagram.com/explore/tags/beauty/","emoji":"camera","heat":"★★☆☆☆","proposal":"通用标签玩法","copy":"Trending now."}];
+
+function renderCards(cards){
+var grid=document.getElementById('cardGrid');
+grid.innerHTML='';
+cards.forEach(function(c){
+var cls=c.platform==='Twitter/X'?'twitter':c.platform==='YouTube'?'youtube':'instagram';
+var viewsHTML=c.views?'<div style="font-size:12px;color:#9ca3af;margin-top:4px">'+c.views+'</div>':'';
+var card=document.createElement('div');
+card.className='card';
+card.setAttribute('data-platform',c.platform);
+card.innerHTML='<div class="card-header"><span class="platform-tag '+cls+'">'+c.platform+'</span><span class="heat">'+c.heat+'</span></div><div class="card-title">'+c.title+'</div><div class="card-proposal">💡 '+c.proposal+'</div><div class="card-copy">'+c.copy+'</div>'+viewsHTML+'<a class="card-link" href="'+c.link+'" target="_blank" rel="noopener">查看原文 →</a>';
+grid.appendChild(card);
+});
+updateStats(cards);
+}
+
+function updateStats(displayed){
+document.getElementById('totalCount').textContent=allCards.length;
+document.getElementById('twitterCount').textContent=allCards.filter(function(c){return c.platform==='Twitter/X'}).length;
+document.getElementById('youtubeCount').textContent=allCards.filter(function(c){return c.platform==='YouTube'}).length;
+document.getElementById('instagramCount').textContent=allCards.filter(function(c){return c.platform==='Instagram'}).length;
+document.getElementById('allCount').textContent=displayed.length;
+}
+
+function filterCards(platform){
+var btns=document.querySelectorAll('.filter-btn');
+btns.forEach(function(b){b.classList.remove('active')});
+event.target.classList.add('active');
+if(platform==='all'){renderCards(allCards);return}
+var filtered=allCards.filter(function(c){return c.platform===platform});
+renderCards(filtered);
+}
+
+document.getElementById('timestamp').textContent='数据更新于：'+new Date().toLocaleString('zh-CN');
+renderCards(allCards);
 </script>
 </body>
 </html>
