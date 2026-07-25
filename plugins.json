@@ -1,0 +1,41 @@
+﻿{
+  "version": "1.0",
+  "last_updated": "2026-07-26 03:43",
+  "plugins": [
+    {
+      "id": "twitter-x-trends",
+      "name": "Twitter/X Trends",
+      "icon": "🐦",
+      "platform": "Twitter/X",
+      "source": "GitHub Actions Daily Crawl",
+      "update_interval": "daily",
+      "status": "active",
+      "data_file": "trends_combined.json",
+      "filter_enabled": true,
+      "generic_tags_filtered": true
+    },
+    {
+      "id": "youtube-trending",
+      "name": "YouTube Trending",
+      "icon": "▶️",
+      "platform": "YouTube",
+      "source": "GitHub Actions Daily Crawl",
+      "update_interval": "daily",
+      "status": "active",
+      "data_file": "trends_combined.json",
+      "filter_enabled": true
+    },
+    {
+      "id": "instagram-trends",
+      "name": "Instagram Trends",
+      "icon": "📸",
+      "platform": "Instagram",
+      "source": "GitHub Actions Daily Crawl",
+      "update_interval": "daily",
+      "status": "active",
+      "data_file": "trends_combined.json",
+      "filter_enabled": true,
+      "generic_tags_filtered": true
+    }
+  ]
+}
