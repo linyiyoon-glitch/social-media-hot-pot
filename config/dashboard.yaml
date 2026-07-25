@@ -1,0 +1,33 @@
+﻿# Dashboard Configuration
+app:
+  name: "Hellvape Trend Radar"
+  version: "2.0"
+  timezone: "Asia/Shanghai"
+  language: "zh-CN"
+  
+dashboard:
+  title: "🔥 Hellvape Trend Radar"
+  subtitle: "Plugin-Based Social Intelligence"
+  update_time: "09:00"  # Beijing time UTC+8
+  default_filter: "active_trends_only"
+  
+plugins:
+  auto_discover: true
+  scan_interval_hours: 1
+  health_check_enabled: true
+  
+data:
+  cache_enabled: true
+  cache_ttl_hours: 6
+  max_trends_per_platform: 50
+  generic_tags_filtered: true
+  
+ai:
+  enabled: false  # Set to true when LLM available
+  model: "local_fallback"
+  prompt_file: "prompts/trend_analysis.yaml"
+  
+deploy:
+  github_pages: true
+  pages_url: "https://linyiyoon-glitch.github.io/social-media-hot-pot/"
+  auto_retry_failed: true
