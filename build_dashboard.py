@@ -143,3 +143,4 @@ h += '</script>\n</body>\n</html>'
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(h)
 print("OK: index.html generated (" + str(len(h)) + " bytes), " + str(len(filtered)) + " trends shown, " + str(generic_count) + " filtered")
+
