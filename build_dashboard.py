@@ -1,43 +1,35 @@
 ﻿import json
 import os
 from datetime import datetime
-from plugins.manager import PluginManager
-from plugins.loader import PluginLoader
 
-# 初始化
-manager = PluginManager()
-loader = PluginLoader()
-
-# 自动发现插件
-discovered = manager.discover_plugins()
-print(f"Discovered {len(discovered)} plugins: {discovered}")
-
-# 加载所有插件数据
-all_trends = loader.load_all_plugin_data()
-print(f"Loaded {len(all_trends)} total trends")
-
-# 泛标签黑名单
+# 黑名单标签
 blacklist = [
-    'viral', 'trending', 'explore', 'fyp', 'reels', 'followme', 'instagood',
-    'photooftheday', 'instalike', 'beautiful', 'love', 'art', 'happy',
-    'picoftheday', 'nature', 'cute', 'style', 'motivation', 'fitness',
-    'food', 'travel', 'selfie', 'life', 'model', 'design', 'photography',
-    'illustration', 'digitalart', 'sketch', 'drawing', 'painting', 'handmade',
-    'craft', 'wedding', 'baby', 'pets', 'animals', 'sunset', 'beach',
-    'mountain', 'coffee', 'music', 'game', 'movie', 'book', 'health',
-    'workout', 'gym', 'ootd', 'outfit', 'makeup', 'hair', 'school',
-    'weekend', 'party', 'holiday', 'newyear', 'christmas', 'halloween'
+    "viral", "trending", "explore", "fyp", "reels", "followme", "instagood",
+    "photooftheday", "instalike", "beautiful", "love", "art", "happy",
+    "picoftheday", "nature", "cute", "style", "motivation", "fitness",
+    "food", "travel", "selfie", "life", "model", "design", "photography",
+    "illustration", "digitalart", "sketch", "drawing", "painting", "handmade",
+    "craft", "wedding", "baby", "pets", "animals", "sunset", "beach",
+    "mountain", "coffee", "music", "game", "movie", "book", "health",
+    "workout", "gym", "ootd", "outfit", "makeup", "hair", "school",
+    "weekend", "party", "holiday", "newyear", "christmas", "halloween"
 ]
 
 def is_generic(title):
-    lower = title.lower().replace(r"[^a-z0-9]", "")
-    return any(b == lower for b in blacklist)
+    t = title.lower().replace("#", "").strip()
+    return any(b == t for b in blacklist)
 
-filtered = [t for t in all_trends if not is_generic(t.get("title", ""))]
-generic_count = len(all_trends) - len(filtered)
+# 加载数据
+data_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "hotspot_data.json")
+with open(data_file, "r", encoding="utf-8") as f:
+    hotspots = json.load(f)
 
-now = datetime.now().strftime("%Y-%m-%d %H:%M")
-plugins_list = list(manager.get_active_plugins().values())
+cards = hotspots.get("cards", [])
+now = datetime.now().strftime("%Y/%m/%d %H:%M")
+
+# 过滤泛标签
+filtered = [c for c in cards if not is_generic(c.get("title", ""))]
+generic_count = len(cards) - len(filtered)
 
 # 按平台分组
 platform_groups = {}
@@ -47,15 +39,22 @@ for card in filtered:
         platform_groups[plat] = []
     platform_groups[plat].append(card)
 
-# 生成每个平台的卡片HTML
+# 生成卡片 HTML
 cards_html = ""
-for platform, cards in platform_groups.items():
-    for c in cards[:20]:
+stats_html = ""
+filter_buttons = ""
+emoji_map = {"Twitter/X": "🐦", "YouTube": "▶️", "Instagram": "📸"}
+
+for platform, pcards in platform_groups.items():
+    emoji = emoji_map.get(platform, "🔥")
+    stats_html += f'<div class="stat"><div class="num">{len(pcards)}</div><div class="label">{platform}</div></div>'
+    filter_buttons += f'<button class="nav-btn">{emoji} {platform} ({len(pcards)})</button>'
+    for c in pcards[:20]:
         views_html = c.get("views", "")
         vb = f'<span class="views-badge">{views_html}</span>' if views_html else ""
-        cards_html += f'''<div class="trend-card" data-platform="{platform}">
+        cards_html += f"""<div class="trend-card" data-platform="{platform}">
             <div class="card-top">
-                <span class="platform-indicator">{c.get("emoji","")}{platform}</span>
+                <span class="platform-indicator">{emoji}{platform}</span>
                 <span class="heat-stars">{c.get("heat","")}</span>{vb}
             </div>
             <h3 class="trend-title">{c["title"]}</h3>
@@ -64,22 +63,25 @@ for platform, cards in platform_groups.items():
                 <p class="copy-text"><em>文案草稿:</em> "{c.get("copy","")}"</p>
             </div>
             <a href="{c["link"]}" target="_blank" class="view-source-btn">查看原文 →</a>
-        </div>'''
+        </div>"""
 
 sidebar_items = ""
-filter_buttons = ""
+for platform in platform_groups:
+    emoji = emoji_map.get(platform, "🔥")
+    sidebar_items += f'<div class="sidebar-item active"><span class="sidebar-icon">{emoji}</span><span class="sidebar-label">{platform}</span></div>'
+
+plugins_json = os.path.join(os.path.dirname(os.path.abspath(__file__)), "plugins.json")
+plugins_list = []
+if os.path.exists(plugins_json):
+    with open(plugins_json, "r", encoding="utf-8") as f:
+        plugins_list = json.load(f).get("plugins", [])
+
 for plugin in plugins_list:
     pname = plugin.get("name", "Unknown")
     icon = plugin.get("icon", "📦")
-    status = plugin.get("status", "active")
-    sidebar_items += f'<div class="sidebar-item active"><span class="sidebar-icon">{icon}</span><span class="sidebar-label">{pname}</span></div>'
-    filter_buttons += f'<button class="nav-btn">{icon} {pname}</button>'
+    sidebar_items += f'<div class="sidebar-item"><span class="sidebar-icon">{icon}</span><span class="sidebar-label">{pname}</span></div>'
 
-stats_html = ""
-for platform, cards in platform_groups.items():
-    stats_html += f'<div class="stat"><div class="num">{len(cards)}</div><div class="label">{platform}</div></div>'
-
-h = f'''<!DOCTYPE html>
+h = f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -92,10 +94,18 @@ body{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
 .sidebar-header{{padding:0 24px 20px;border-bottom:1px solid #f0f0f0;margin-bottom:16px}}
 .sidebar-header h1{{font-size:18px;font-weight:700;color:#1a1a2e;margin-bottom:4px}}
 .sidebar-header p{{font-size:12px;color:#6b7280}}
-.sidebar-item{{display:flex;align-items:center;gap:12px;padding:12px 24px;cursor:pointer}}
+.sidebar-item{{display:flex;align-items:center;gap:12px;padding:12px 24px;cursor:pointer;transition:background .2s}}
+.sidebar-item:hover{{background:#f3f4f6}}
 .sidebar-icon{{font-size:20px}}.sidebar-label{{flex:1;font-size:14px;font-weight:500}}
 .main-content{{flex:1;margin-left:260px;padding:32px;max-width:1400px}}
-.timestamp-bar{{background:#fef3c7;border:1px solid #f59e0b;border-radius:10px;padding:12px 20px;margin-bottom:24px;font-size:13px}}
+.stats-row{{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:24px}}
+.stat{{background:#fff;border-radius:12px;padding:16px;text-align:center;border:1px solid #f0f0f0}}
+.stat .num{{font-size:28px;font-weight:700;color:#1a1a2e}}
+.stat .label{{font-size:12px;color:#6b7280;margin-top:4px}}
+.timestamp-bar{{background:#fef3c7;border:1px solid #f59e0b;border-radius:10px;padding:12px 20px;margin-bottom:24px;font-size:13px;display:flex;justify-content:space-between;align-items:center}}
+.filter-buttons{{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}}
+.nav-btn{{padding:8px 16px;border:1px solid #e5e7eb;background:#fff;border-radius:20px;cursor:pointer;font-size:14px;transition:all .2s}}
+.nav-btn:hover,.nav-btn.active{{background:#1a1a2e;color:#fff;border-color:#1a1a2e}}
 .trends-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px}}
 .trend-card{{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid #f0f0f0;transition:transform .2s}}
 .trend-card:hover{{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.1)}}
@@ -114,19 +124,52 @@ body{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
 <div class="sidebar">
     <div class="sidebar-header">
         <h1>🔥 Hellvape Trend Radar</h1>
-        <p>Plugin Architecture v2.0</p>
+        <p>Plugin Architecture v2.0 · {now}</p>
     </div>
     {sidebar_items}
 </div>
 <div class="main-content">
-    <h2 style="font-size:24px;font-weight:700;margin-bottom:16px">Plugin-Based Intelligence</h2>
-    <div class="timestamp-bar">已过滤 {generic_count} 条泛标签 | 显示 {len(filtered)} 条有效热点 | 更新于 {now}</div>
+    <div class="stats-row">{stats_html}</div>
+    <div class="timestamp-bar">
+        <span>已过滤 {generic_count} 条泛标签 | 显示 {len(filtered)} 条有效热点 | 更新于 {now}</span>
+        <label><input type="checkbox" id="toggleFilter" checked onchange="toggleGeneric()">仅显示时效热点</label>
+    </div>
+    <div class="filter-buttons">{filter_buttons}<button class="nav-btn active" onclick="showAll()">全部 ({len(cards)})</button></div>
     <div class="trends-grid">{cards_html}</div>
 </div>
+<script>
+function toggleGeneric(){{
+    const show = document.getElementById('toggleFilter').checked;
+    document.querySelectorAll('.trend-card').forEach(card => {{
+        const title = card.querySelector('.trend-title').textContent.toLowerCase();
+        const isGen = {json.dumps(blacklist)};
+        if (show && isGen.some(b => title.includes(b))) {{
+            card.style.display = 'none';
+        }} else {{
+            card.style.display = '';
+        }}
+    }});
+}}
+function showAll() {{
+    document.querySelectorAll('.trend-card').forEach(card => card.style.display = '');
+}}
+document.querySelectorAll('.nav-btn').forEach(btn => {{
+    btn.addEventListener('click', function() {{
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const platform = this.textContent.match(/(.*)\\s*\\(.*\\)/);
+        if (platform) {{
+            const name = platform[1].trim();
+            document.querySelectorAll('.trend-card').forEach(card => {{
+                card.style.display = card.dataset.platform === name ? '' : 'none';
+            }});
+        }}
+    }});
+}});
+</script>
 </body>
 </html>"""
 
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(h)
-
-print(f"OK: index.html generated ({len(h)} bytes), {len(filtered)} trends, {generic_count} filtered")
+print(f"OK: index.html generated ({len(h)} bytes), {len(filtered)} trends shown, {generic_count} filtered")
