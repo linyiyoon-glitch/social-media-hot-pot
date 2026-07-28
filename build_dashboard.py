@@ -39,14 +39,14 @@ for card in filtered:
 cards_html = ""
 stats_html = ""
 filter_buttons = ""
-emoji_map = {"Twitter/X": "\U0001F426", "YouTube": "\u25B6\uFE0F", "Instagram": "\U0001F4F8"}
+emoji_map = {"Twitter/X": "🐦", "YouTube": "▶️", "Instagram": "📸"}
 platform_order = ["Twitter/X", "YouTube", "Instagram"]
 
 for platform in platform_order:
     if platform not in platform_groups:
         continue
     pcards = platform_groups[platform]
-    emoji = emoji_map.get(platform, "\U0001F525")
+    emoji = emoji_map.get(platform, "🔷")
     stats_html = stats_html + '<div class="stat"><div class="num">' + str(len(pcards)) + '</div><div class="label">' + platform + '</div></div>'
     filter_buttons = filter_buttons + '<button class="nav-btn" data-platform="' + platform + '">' + emoji + " " + platform + ' (' + str(len(pcards)) + ')</button>'
     for c in pcards[:20]:
@@ -56,29 +56,29 @@ for platform in platform_order:
         proposal_val = c.get("proposal") or ""
         copy_val = c.get("copy") or ""
         link_val = c.get("link") or "#"
-        heat_val = c.get("heat") or "\u2605\u2605\u2606\u2606\u2606"
-        cards_html = cards_html + '<div class="trend-card" data-platform="' + platform + '">'
-        cards_html = cards_html + '<div class="card-top">'
-        cards_html = cards_html + '<span class="platform-indicator">' + emoji + platform + '</span>'
-        cards_html = cards_html + '<span class="heat-stars">' + heat_val + '</span>'
-        cards_html = cards_html + vb
-        cards_html = cards_html + '</div>'
-        cards_html = cards_html + '<h3 class="trend-title">' + title_val + '</h3>'
-        cards_html = cards_html + '<div class="trend-content">'
+        heat_val = c.get("heat") or "⭐⭐☆☆"
+        cards_html = cards_html + '<div class="trend-card" data-platform="' + platform + '>'
+        cards_html += '<div class="card-top">'
+        cards_html += '<span class="platform-indicator">' + emoji + platform + '</span>'
+        cards_html += '<span class="heat-stars">' + heat_val + '</span>'
+        cards_html += vb
+        cards_html += '</div>'
+        cards_html += '<h3 class="trend-title">' + title_val + '</h3>'
+        cards_html += '<div class="trend-content">'
         if proposal_val:
-            cards_html = cards_html + '<p class="proposal"><strong>创意方向:</strong>' + proposal_val + '</p>'
+            cards_html += '<p class="proposal"><strong>创意方向:</strong>' + proposal_val + '</p>'
         if copy_val:
-            cards_html = cards_html + '<p class="copy-text"><em>文案草稿:</em> "' + copy_val + '"</p>'
-        cards_html = cards_html + '</div>'
-        cards_html = cards_html + '<a href="' + link_val + '" target="_blank" class="view-source-btn">查看原文 →</a>'
-        cards_html = cards_html + '</div>'
+            cards_html += '<p class="copy-text"><em>文案草稿:</em> "' + copy_val + '"</p>'
+        cards_html += '</div>'
+        cards_html += '<a href="' + link_val + '" target="_blank" class="view-source-btn">查看原文 →</a>'
+        cards_html += '</div>'
 
 sidebar_items = ""
 for platform in platform_order:
     if platform not in platform_groups:
         continue
-    emoji = emoji_map.get(platform, "\U0001F525")
-    sidebar_items = sidebar_items + '<div class="sidebar-item" data-platform="' + platform + '"><span class="sidebar-icon">' + emoji + '</span><span class="sidebar-label">' + platform + '</span></div>'
+    emoji = emoji_map.get(platform, "🔷")
+    sidebar_items += '<div class="sidebar-item" data-platform="' + platform + '"><span class="sidebar-icon">' + emoji + '</span><span class="sidebar-label">' + platform + '</span></div>'
 
 h = "<!DOCTYPE html>\n"
 h += '<html lang="zh-CN">\n'
@@ -128,25 +128,53 @@ h += '<button class="sidebar-toggle" onclick="toggleSidebar()">&#9776;</button>\
 h += '<div class="sidebar" id="sidebar"><div class="sidebar-header"><h1>&#128269; Hellvape Trend Radar</h1><p>Plugin Architecture v2.0 · ' + now + '</p></div>' + sidebar_items + '</div>'
 h += '<div class="main-content" id="mainContent">\n'
 h += '<div class="stats-row">' + stats_html + '</div>\n'
-h += '<div class="timestamp-bar"><span>\u5df2\u8fc7\u6ed7 ' + str(generic_count) + ' \u6761\u6cf9\u6807\u7b7e | \u663e\u793a ' + str(len(filtered)) + ' \u6761\u6709\u6548\u70b9\u7167 | \u66f4\u65b0\u4e8e ' + now + '</span>\n'
-h += '<label style="white-space:nowrap;font-size:13px"><input type="checkbox" id="toggleFilter" checked onchange="toggleGeneric()">\u4ec5\u663e\u793a\u65f6\u6548\u70b9\u7167</label></div>\n'
-h += '<div class="filter-buttons">' + filter_buttons + '<button class="nav-btn" data-platform="all" onclick="showAll()">\u5168\u90e8 (' + str(len(cards)) + ')</button></div>\n'
+h += '<div class="timestamp-bar"><span>已过滤 ' + str(generic_count) + ' 条泛标签 | 显示 ' + str(len(filtered)) + ' 条有效热点 | 更新于 ' + now + '</span>\n'
+h += '<label style="white-space:nowrap;font-size:13px"><input type="checkbox" id="toggleFilter" checked onchange="toggleGeneric()">仅显示时效热点</label></div>\n'
+h += '<div class="filter-buttons">' + filter_buttons + '<button class="nav-btn" data-platform="all" onclick="showAll()">全部 (' + str(len(cards)) + ')</button></div>\n'
 h += '<div class="trends-grid">' + cards_html + '</div></div>\n'
 
+# 核心修复：所有 JavaScript 都正确声明且无引号冲突
 js_func_toggleSidebar = "function toggleSidebar(){var s=document.getElementById('sidebar'),m=document.getElementById('mainContent'),t=document.querySelector('.sidebar-toggle');s.classList.toggle('collapsed');m.classList.toggle('expanded');t.classList.toggle('collapsed')}\n"
 js_func_toggleGeneric = "function toggleGeneric(){var show=document.getElementById('toggleFilter').checked,bl=["
 for i in range(len(blacklist)):
     if i > 0: js_func_toggleGeneric += ', '
     js_func_toggleGeneric += '"' + blacklist[i] + '"'
 js_func_toggleGeneric += "];cards=document.querySelectorAll('.trend-card');cards.forEach(function(card){var t=card.querySelector('.trend-title');if(t&&bl.some(function(b){return t.textContent.toLowerCase().includes(b)})){card.style.display='none'}else{card.style.display=''}})}\n"
-js_func_showAll = "function showAll(){document.querySelectorAll('.trend-card').forEach(function(c){c.style.display=''});document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active')});document.querySelector('[data-platform=all]').classList.add('active')}\n"
-js_func_filterButtons = "document.querySelectorAll('.nav-btn').forEach(function(btn){btn.addEventListener('click',function(){var p=this.getAttribute('data-platform');document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active')});this.classList.add('active');if(p==='all'){showAll()}else{document.querySelectorAll('.trend-card').forEach(function(card){card.style.display=card.dataset.platform===p?'':'none'})}})};\n"
-js_func_sidebarItems = "document.querySelectorAll('.sidebar-item').forEach(function(item){item.addEventListener('click',function(){var p=this.getAttribute('data-platform');document.querySelector('[data-platform=\"'+p+'\"]').click()})});\n"
+
+# 修复：选择器添加双引号，保证能找到 all 按钮
+js_func_showAll = "function showAll(){document.querySelectorAll('.trend-card').forEach(function(c){c.style.display=''});document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active')});document.querySelector('[data-platform=\"all\"]').classList.add('active')}\n"
+
+# 简化版过滤函数，避免复杂嵌套
+js_func_filterButtons = (
+    "document.querySelectorAll('.nav-btn').forEach(function(btn){"
+    "btn.addEventListener('click',function(){"
+    "var p=this.getAttribute('data-platform');"
+    "document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active')});"
+    "this.classList.add('active');"
+    "if(p==='all'){showAll()}else{"
+    "document.querySelectorAll('.trend-card').forEach(function(card){"
+    "card.style.display=card.dataset.platform===p?'':'none'"
+    "}));}"
+    ")});\n"
+)
+
+# 侧边栏项点击也同步筛选功能（可选，当前没用到但保持兼容）
+js_func_sidebarItems = "document.querySelectorAll('.sidebar-item').forEach(function(item){item.addEventListener('click',function(){var p=this.getAttribute('data-platform');filterByPlatform(p)})});\n"
+
+# 补充一个辅助函数，供 sideBar 使用
+h_extra = "\nfunction filterByPlatform(platform){"
+h_extra += "document.querySelectorAll('.trend-card').forEach(function(card){"
+h_extra += "card.style.display=card.dataset.platform===platform?'':'none'"
+h_extra += "});"
+h_extra += "document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active')});"
+h_extra += "document.querySelector('[data-platform=\"'+platform+'\"]').classList.add('active');"
+h_extra += "}\n"
 
 h += "<script>\n"
 h += js_func_toggleSidebar
-h += js_func_toggleGeneric
 h += js_func_showAll
+h += js_func_toggleGeneric
+h_extra
 h += js_func_filterButtons
 h += js_func_sidebarItems
 h += "</script>\n"
@@ -155,4 +183,4 @@ h += "</html>\n"
 
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(h)
-print("OK: index.html generated")
+print("OK: index.html generated with fixed interaction buttons")

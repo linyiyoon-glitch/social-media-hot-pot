@@ -1,170 +1,60 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hellvape Trend Radar</title>
+<title>Hellvape Trend Radar v2.0</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f8f9fa;color:#1a1a2e;line-height:1.6}
-.container{max-width:1200px;margin:0 auto;padding:20px}
-/* 过滤提示条 */
-.filter-banner{background:#fef3c7;border:1px solid #f59e0b;border-radius:12px;padding:14px 20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
-.filter-banner.hidden{display:none}
-.filter-banner a{color:#1a1a2e;text-decoration:underline;font-weight:600}
-.filter-banner button{padding:6px 14px;border-radius:8px;border:1px solid #d1d5db;background:#fff;cursor:pointer;font-size:13px;margin-left:12px}
-.filter-banner button:hover{background:#f3f4f6}
-header{text-align:center;padding:40px 20px;background:#fff;border-radius:16px;margin-bottom:30px;box-shadow:0 2px 12px rgba(0,0,0,0.04)}
-header h1{font-size:28px;font-weight:700;color:#1a1a2e;margin-bottom:8px}
-header p{color:#6b7280;font-size:14px}
-.header-stats{display:flex;gap:20px;justify-content:center;margin-top:20px;flex-wrap:wrap}
-.stat{background:#f8f9fa;padding:12px 24px;border-radius:10px;text-align:center}
-.stat div:first-child{font-size:24px;font-weight:700;color:#1a1a2e}
-.stat div:last-child{font-size:12px;color:#6b7280}
-.filter-bar{display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap}
-.filter-btn{padding:8px 20px;border-radius:20px;border:1px solid #e5e7eb;background:#fff;color:#4b5563;cursor:pointer;font-size:14px;transition:all .2s}
-.filter-btn:hover,.filter-btn.active{background:#1a1a2e;color:#fff;border-color:#1a1a2e}
-.switch-container{display:flex;align-items:center;gap:10px;margin-top:16px;justify-content:center;font-size:14px;color:#6b7280}
-.switch{position:relative;width:44px;height:24px;background:#d1d5db;border-radius:12px;cursor:pointer;transition:background .2s}
-.switch.active{background:#1a1a2e}
-.switch::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform .2s}
-.switch.active::after{transform:translateX(20px)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
-.card{background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #f0f0f0;transition:transform .2s,box-shadow .2s}
-.card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,0.1)}
-.card-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.platform-tag{padding:4px 12px;border-radius:16px;font-size:12px;font-weight:600;color:#fff;display:inline-flex;align-items:center;gap:4px}
-.platform-tag.twitter{background:#1da1f2}.platform-tag.youtube{background:#ff0000}.platform-tag.instagram{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
-.heat{font-size:16px}
-.card-title{font-size:18px;font-weight:600;color:#1a1a2e;margin-bottom:12px}
-.card-proposal{font-size:14px;color:#4b5563;margin-bottom:8px;padding:12px;background:#f9fafb;border-radius:8px;border-left:3px solid #6b8fa3}
-.card-copy{font-size:13px;color:#6b7280;font-style:italic;margin:12px 0}
-.card-link{display:inline-block;padding:8px 16px;background:#1a1a2e;color:#fff;text-decoration:none;border-radius:8px;font-size:13px;transition:background .2s}
-.card-link:hover{background:#2d3748}
-.timestamp{text-align:center;color:#9ca3af;font-size:13px;margin-bottom:24px}
-.filtered-count{text-align:center;color:#6b7280;font-size:13px;margin-bottom:16px}
-@media(max-width:768px){.grid{grid-template-columns:1fr}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8f9fa;color:#1a1a2e;display:flex;min-height:100vh}
+.sidebar{width:260px;background:#fff;border-right:1px solid #e5e7eb;padding:24px 0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;transition:.3s}
+.sidebar.collapsed{translateX(-260px)}
+.sidebar-toggle{position:fixed;top:20px;left:260px;background:#1a1a2e;color:#fff;border:none;width:36px;height:36px;cursor:pointer;z-index:101;border-radius:0 8px 8px 0;font-size:18px;transition:left .3s;display:flex;align-items:center;justify-content:center}
+.sidebar.toggle.collapsed{left:0}
+.main-content{margin-left:260px;padding:24px;transition:.3s}
+.main-content.expanded{margin-left:0}
+.sidebar-header{margin-bottom:24px}
+.sidebar-header h1{font-size:20px;margin-bottom:8px;color:#1a1a2e}
+.sidebar-header p{font-size:12px;color:#6b7280}
+.sidebar-item{padding:12px;margin-bottom:8px;background:#f3f4f6;border-radius:8px;cursor:pointer;transition:.2s}
+.sidebar-item:hover{background:#e5e7eb}
+.sidebar-item .sidebar-icon{margin-right:8px}
+.stats-row{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.stat{background:#fff;padding:12px 20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:center;min-width:120px}
+.stat .num{font-size:24px;font-weight:700;color:#1a1a2e}
+.stat .label{font-size:12px;color:#6b7280;margin-top:4px}
+.timestamp-bar{background:#fef3c7;border:1px solid #f59e0b;border-radius:10px;padding:12px 20px;margin-bottom:24px;font-size:13px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.filter-buttons{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.nav-btn{padding:8px 16px;border:1px solid #e5e7eb;background:#fff;border-radius:20px;cursor:pointer;font-size:14px;transition:.2s}
+.nav-btn:hover,.nav-btn.active{background:#1a1a2e;color:#fff;border-color:#1a1a2e}
+.trends-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px}
+.trend-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid #f0f0f0;transition:.2s}
+.trend-card:hover{translateY(-4px);box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.card-top{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.platform-indicator{background:#1a1a2e;color:#fff;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600}
+.heat-stars{font-size:14px}.views-badge{font-size:12px;color:#9ca3af;background:#f3f4f6;padding:3px 10px;border-radius:6px}
+.trend-title{font-size:16px;font-weight:600;margin-bottom:12px;min-height:20px}
+.proposal{font-size:13px;color:#4b5563;margin-bottom:6px}
+.copy-text{font-size:12px;color:#6b7280;font-style:italic}
+.view-source-btn{display:inline-block;padding:6px 14px;background:#1a1a2e;color:#fff;text-decoration:none;border-radius:6px;font-size:12px;margin-top:8px;transition:.2s}
+.view-source-btn:hover{background:#2d3748}
+@media(max-width:768px){.sidebar{translateX(-260px)}.sidebar-toggle{left:0!important}.main-content{margin-left:0!important}}
 </style>
 </head>
 <body>
-<div class="container">
-<header>
-<h1>🔥 Hellvape Trend Radar</h1>
-<p>每天自动更新的蹭热点创意看板 · Built for Vapers</p>
-<div class="header-stats">
-<div class="stat"><div id="totalCount">0</div><div>Total Trends</div></div>
-<div class="stat"><div id="twitterCount">0</div><div>Twitter/X</div></div>
-<div class="stat"><div id="youtubeCount">0</div><div>YouTube</div></div>
-<div class="stat"><div id="instagramCount">0</div><div>Instagram</div></div>
-</div>
-</header>
-<div class="timestamp" id="timestamp"></div>
-<!-- 过滤提示条 -->
-<div class="filter-banner" id="filterBanner">
-<span>已过滤 <strong id="filteredCount">0</strong> 条泛标签（如 #viral、#trending），<a href="#" onclick="showAll()">点击查看全部</a></span>
-<button onclick="toggleFilter()">关闭自动过滤</button>
-</div>
-<div class="filter-bar">
-<button class="filter-btn active" onclick="filterCards('all')">全部 (<span id="allCount">0</span>)</button>
-<button class="filter-btn" onclick="filterCards('Twitter/X')">Twitter/X</button>
-<button class="filter-btn" onclick="filterCards('YouTube')">YouTube</button>
-<button class="filter-btn" onclick="filterCards('Instagram')">Instagram</button>
-</div>
-<div class="switch-container">
-<span>仅显示时效热点（事件型）</span>
-<div class="switch active" id="trendSwitch" onclick="toggleFilter()"></div>
-</div>
-<br>
-<div class="filtered-count" id="filteredMsg"></div>
-<div class="grid" id="cardGrid"></div>
-</div>
+<button class="sidebar-toggle" onclick="toggleSidebar()">&#9776;</button>
+<div class="sidebar" id="sidebar"><div class="sidebar-header"><h1>&#128269; Hellvape Trend Radar</h1><p>Plugin Architecture v2.0 · 2026/07/28 11:48</p></div><div class="sidebar-item" data-platform="Twitter/X"><span class="sidebar-icon">🐦</span><span class="sidebar-label">Twitter/X</span></div><div class="sidebar-item" data-platform="YouTube"><span class="sidebar-icon">▶️</span><span class="sidebar-label">YouTube</span></div><div class="sidebar-item" data-platform="Instagram"><span class="sidebar-icon">📸</span><span class="sidebar-label">Instagram</span></div></div><div class="main-content" id="mainContent">
+<div class="stats-row"><div class="stat"><div class="num">10</div><div class="label">Twitter/X</div></div><div class="stat"><div class="num">10</div><div class="label">YouTube</div></div><div class="stat"><div class="num">2</div><div class="label">Instagram</div></div></div>
+<div class="timestamp-bar"><span>已过滤 8 条泛标签 | 显示 22 条有效热点 | 更新于 2026/07/28 11:48</span>
+<label style="white-space:nowrap;font-size:13px"><input type="checkbox" id="toggleFilter" checked onchange="toggleGeneric()">仅显示时效热点</label></div>
+<div class="filter-buttons"><button class="nav-btn" data-platform="Twitter/X">🐦 Twitter/X (10)</button><button class="nav-btn" data-platform="YouTube">▶️ YouTube (10)</button><button class="nav-btn" data-platform="Instagram">📸 Instagram (2)</button><button class="nav-btn" data-platform="all" onclick="showAll()">全部 (30)</button></div>
+<div class="trends-grid"><div class="trend-card" data-platform="Twitter/X><div class="card-top"><span class="platform-indicator">🐦Twitter/X</span><span class="heat-stars">★★☆☆☆</span></div><h3 class="trend-title">Trump 2028</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>反差梗/冷幽默风格适配</p><p class="copy-text"><em>文案草稿:</em> "When others chase, we build."</p></div><a href="https://x.com/search?q=Trump%202028" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="Twitter/X><div class="card-top"><span class="platform-indicator">🐦Twitter/X</span><span class="heat-stars">★★★★☆</span></div><h3 class="trend-title">#SmackDown</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>视觉融合：擂台摔角风x Dead Rabbit</p><p class="copy-text"><em>文案草稿:</em> "In the ring of vaping there is only one champion."</p></div><a href="https://x.com/search?q=%23SmackDown" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="Twitter/X><div class="card-top"><span class="platform-indicator">🐦Twitter/X</span><span class="heat-stars">★★☆☆☆</span></div><h3 class="trend-title">#WHCD</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>反差梗/冷幽默风格适配</p><p class="copy-text"><em>文案草稿:</em> "When others chase, we build."</p></div><a href="https://x.com/search?q=%23WHCD" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="Twitter/X><div class="card-top"><span class="platform-indicator">🐦Twitter/X</span><span class="heat-stars">★★★★★</span></div><h3 class="trend-title">#OPLive</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>玩家视角：电竞选手EDC装备展示</p><p class="copy-text"><em>文案草稿:</em> "Your main character gear. Peak performance every match."</p></div><a href="https://x.com/search?q=%23OPLive" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="Twitter/X><div class="card-top"><span class="platform-indicator">🐦Twitter/X</span><span class="heat-stars">★★☆☆☆</span></div><h3 class="trend-title">White House Correspondents</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>反差梗/冷幽默风格适配</p><p class="copy-text"><em>文案草稿:</em> "When others chase, we build."</p></div><a href="https://x.com/search?q=White%20House%20Correspondents" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="Twitter/X><div class="card-top"><span class="platform-indicator">🐦Twitter/X</span><span class="heat-stars">★★☆☆☆</span></div><h3 class="trend-title">#Eurovision</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>反差梗/冷幽默风格适配</p><p class="copy-text"><em>文案草稿:</em> "When others chase, we build."</p></div><a href="https://x.com/search?q=%23Eurovision" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="Twitter/X><div class="card-top"><span class="platform-indicator">🐦Twitter/X</span><span class="heat-stars">★★☆☆☆</span></div><h3 class="trend-title">Taylor Swift</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>反差梗/冷幽默风格适配</p><p class="copy-text"><em>文案草稿:</em> "When others chase, we build."</p></div><a href="https://x.com/search?q=Taylor%20Swift" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="Twitter/X><div class="card-top"><span class="platform-indicator">🐦Twitter/X</span><span class="heat-stars">★★★★★</span></div><h3 class="trend-title">#UFC350</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>视觉融合：格斗赛概念图式</p><p class="copy-text"><em>文案草稿:</em> "Champions dont follow trends. They set the standard."</p></div><a href="https://x.com/search?q=%23UFC350" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="Twitter/X><div class="card-top"><span class="platform-indicator">🐦Twitter/X</span><span class="heat-stars">★★★★★</span></div><h3 class="trend-title">Championship Finals</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>视觉融合：格斗赛概念图式</p><p class="copy-text"><em>文案草稿:</em> "Champions dont follow trends. They set the standard."</p></div><a href="https://x.com/search?q=Championship%20Finals" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="Twitter/X><div class="card-top"><span class="platform-indicator">🐦Twitter/X</span><span class="heat-stars">★★★★★</span></div><h3 class="trend-title">#AppleEvent</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>产品拟人：苹果发布会风格xDead Rabbit</p><p class="copy-text"><em>文案草稿:</em> "Welcome to the performance club. No keynote required."</p></div><a href="https://x.com/search?q=%23AppleEvent" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="YouTube><div class="card-top"><span class="platform-indicator">▶️YouTube</span><span class="heat-stars">★★★☆☆</span><span class="views-badge">200.5K views</span></div><h3 class="trend-title">Saucy Santana - Quiet on the Creek [Official Music Video]</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>Reels式产品展示</p><p class="copy-text"><em>文案草稿:</em> "Built for players who push further."</p></div><a href="https://www.youtube.com/watch?v=MKl7uciEUE4" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="YouTube><div class="card-top"><span class="platform-indicator">▶️YouTube</span><span class="heat-stars">★★★★☆</span><span class="views-badge">1.7M views</span></div><h3 class="trend-title">Lanterns | Official Trailer | HBO Max</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>反差梗：影视预告片风格主角换产品</p><p class="copy-text"><em>文案草稿:</em> "Something is rising. Built different."</p></div><a href="https://www.youtube.com/watch?v=7UIBOsuUwc4" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="YouTube><div class="card-top"><span class="platform-indicator">▶️YouTube</span><span class="heat-stars">★★★★★</span><span class="views-badge">1.1M views</span></div><h3 class="trend-title">We Found Another Crazy Car Racing Game</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>视觉融合：F1赛车速度感</p><p class="copy-text"><em>文案草稿:</em> "Speed meets precision. Designed by racers."</p></div><a href="https://www.youtube.com/watch?v=Tij9cC64Pac" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="YouTube><div class="card-top"><span class="platform-indicator">▶️YouTube</span><span class="heat-stars">★★★☆☆</span><span class="views-badge">318.9K views</span></div><h3 class="trend-title">Moneybagg Yo - I See Why (Official Video)</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>Reels式产品展示</p><p class="copy-text"><em>文案草稿:</em> "Built for players who push further."</p></div><a href="https://www.youtube.com/watch?v=YNwmYliuUfE" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="YouTube><div class="card-top"><span class="platform-indicator">▶️YouTube</span><span class="heat-stars">★★★★★</span><span class="views-badge">535.1K views</span></div><h3 class="trend-title">Blade Runner 2099 - Official Teaser | Prime Video</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>视觉融合：赛博朋克风</p><p class="copy-text"><em>文案草稿:</em> "The future of flavor is already here."</p></div><a href="https://www.youtube.com/watch?v=0Dr8I_RyRCg" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="YouTube><div class="card-top"><span class="platform-indicator">▶️YouTube</span><span class="heat-stars">★★★☆☆</span><span class="views-badge">2.3M views</span></div><h3 class="trend-title">Taylor Swift - The Fate of Strangers (Official Lyric Video)</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>Reels式产品展示</p><p class="copy-text"><em>文案草稿:</em> "Built for players who push further."</p></div><a href="https://www.youtube.com/watch?v=DylBH3uj6fo" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="YouTube><div class="card-top"><span class="platform-indicator">▶️YouTube</span><span class="heat-stars">★★★☆☆</span><span class="views-badge">4.8M views</span></div><h3 class="trend-title">Every Project is Someone's First</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>Reels式产品展示</p><p class="copy-text"><em>文案草稿:</em> "Built for players who push further."</p></div><a href="https://www.youtube.com/watch?v=QrZMiS5mTnQ" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="YouTube><div class="card-top"><span class="platform-indicator">▶️YouTube</span><span class="heat-stars">★★★☆☆</span><span class="views-badge">890K views</span></div><h3 class="trend-title">Inside Apple's New Product Lab</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>Reels式产品展示</p><p class="copy-text"><em>文案草稿:</em> "Built for players who push further."</p></div><a href="https://www.youtube.com/watch?v=xYzAbc123" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="YouTube><div class="card-top"><span class="platform-indicator">▶️YouTube</span><span class="heat-stars">★★★★★</span><span class="views-badge">42M views</span></div><h3 class="trend-title">GTA VI Official Gameplay Trailer</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>视觉融合：游戏过场风格</p><p class="copy-text"><em>文案草稿:</em> "Next Level gear for the next generation."</p></div><a href="https://www.youtube.com/watch?v=gmneae5WOjc" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="YouTube><div class="card-top"><span class="platform-indicator">▶️YouTube</span><span class="heat-stars">★★★★★</span><span class="views-badge">1.2M views</span></div><h3 class="trend-title">Why Everyone's Talking About AI Agents</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>热点二创：AI生成机械结构拆解视频</p><p class="copy-text"><em>文案草稿:</em> "Intelligence meets engineering."</p></div><a href="https://www.youtube.com/watch?v=demo123" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="Instagram><div class="card-top"><span class="platform-indicator">📸Instagram</span><span class="heat-stars">★★★☆☆</span></div><h3 class="trend-title">fashion</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>时尚大片但主角是设备</p><p class="copy-text"><em>文案草稿:</em> "The gear in your hand not clothes on you."</p></div><a href="https://www.instagram.com/explore/tags/fashion/" target="_blank" class="view-source-btn">查看原文 →</a></div><div class="trend-card" data-platform="Instagram><div class="card-top"><span class="platform-indicator">📸Instagram</span><span class="heat-stars">★★☆☆☆</span></div><h3 class="trend-title">beauty</h3><div class="trend-content"><p class="proposal"><strong>创意方向:</strong>通用标签玩法</p><p class="copy-text"><em>文案草稿:</em> "Trending now."</p></div><a href="https://www.instagram.com/explore/tags/beauty/" target="_blank" class="view-source-btn">查看原文 →</a></div></div></div>
 <script>
-// 永久泛标签黑名单（约60个常见无效标签）
-var blackList=['viral','trending','explore','fyp','reels','followme','instagood','photooftheday','instalike','beautiful','love','art','happy','picoftheday','nature','cute','style','motivation','fitness','food','travel','selfie','life','model','design','photography','illustration','digitalart','sketch','drawing','painting','handmade','craft','wedding','baby','pets','animals','nature','sunset','beach','mountain','coffee','music','game','movie','book','health','workout','gym','fashion','ootd','outfit','makeup','hair','school','weekend','party','holiday','newyear','christmas','halloween','blackfriday','cybermonday','sale','discount','promo'];
-
-// 判断是否为泛标签
-function isGenericTag(title){
-var lower=title.toLowerCase().replace(/[^a-z0-9]/g,'');
-return blackList.indexOf(lower)>=0;
-}
-
-var allCards=[{"platform":"Twitter/X","title":"Trump 2028","link":"https://x.com/search?q=Trump%202028","emoji":"bird","heat":"★★☆☆☆","proposal":"反差梗/冷幽默风格适配","copy":"When others chase, we build."},{"platform":"Twitter/X","title":"#SmackDown","link":"https://x.com/search?q=%23SmackDown","emoji":"bird","heat":"★★★★☆","proposal":"视觉融合：擂台摔角风 x Dead Rabbit","copy":"In the ring of vaping there is only one champion."},{"platform":"Twitter/X","title":"#WHCD","link":"https://x.com/search?q=%23WHCD","emoji":"bird","heat":"★★☆☆☆","proposal":"反差梗/冷幽默风格适配","copy":"When others chase, we build."},{"platform":"Twitter/X","title":"#OPLive","link":"https://x.com/search?q=%23OPLive","emoji":"bird","heat":"★★★★★","proposal":"玩家视角：电竞选手EDC装备展示","copy":"Your main character gear. Peak performance every match."},{"platform":"Twitter/X","title":"White House Correspondents","link":"https://x.com/search?q=White%20House%20Correspondents","emoji":"bird","heat":"★★☆☆☆","proposal":"反差梗/冷幽默风格适配","copy":"When others chase, we build."},{"platform":"Twitter/X","title":"#Eurovision","link":"https://x.com/search?q=%23Eurovision","emoji":"bird","heat":"★★☆☆☆","proposal":"反差梗/冷幽默风格适配","copy":"When others chase, we build."},{"platform":"Twitter/X","title":"Taylor Swift","link":"https://x.com/search?q=Taylor%20Swift","emoji":"bird","heat":"★★☆☆☆","proposal":"反差梗/冷幽默风格适配","copy":"When others chase, we build."},{"platform":"Twitter/X","title":"#UFC350","link":"https://x.com/search?q=%23UFC350","emoji":"bird","heat":"★★★★★","proposal":"视觉融合：格斗赛概念图式","copy":"Champions dont follow trends. They set the standard."},{"platform":"Twitter/X","title":"Championship Finals","link":"https://x.com/search?q=Championship%20Finals","emoji":"bird","heat":"★★★★★","proposal":"视觉融合：格斗赛概念图式","copy":"Champions dont follow trends. They set the standard."},{"platform":"Twitter/X","title":"#AppleEvent","link":"https://x.com/search?q=%23AppleEvent","emoji":"bird","heat":"★★★★★","proposal":"产品拟人：苹果发布会风格 x Dead Rabbit","copy":"Welcome to the performance club. No keynote required."},{"platform":"YouTube","title":"Saucy Santana - Quiet on the Creek [Official Music Video]","link":"https://www.youtube.com/watch?v=MKl7uciEUE4","emoji":"play","heat":"★★★☆☆","proposal":"Reels式产品展示","copy":"Built for players who push further.","views":"200.5K views"},{"platform":"YouTube","title":"Lanterns | Official Trailer | HBO Max","link":"https://www.youtube.com/watch?v=7UIBOsuUwc4","emoji":"play","heat":"★★★★☆","proposal":"反差梗：影视预告片风格主角换产品","copy":"Something is rising. Built different.","views":"1.7M views"},{"platform":"YouTube","title":"We Found Another Crazy Car Racing Game","link":"https://www.youtube.com/watch?v=Tij9cC64Pac","emoji":"play","heat":"★★★★★","proposal":"视觉融合：F1赛车速度感","copy":"Speed meets precision. Designed by racers.","views":"1.1M views"},{"platform":"YouTube","title":"Moneybagg Yo - I See Why (Official Video)","link":"https://www.youtube.com/watch?v=YNwmYliuUfE","emoji":"play","heat":"★★★☆☆","proposal":"Reels式产品展示","copy":"Built for players who push further.","views":"318.9K views"},{"platform":"YouTube","title":"Blade Runner 2099 - Official Teaser | Prime Video","link":"https://www.youtube.com/watch?v=0Dr8I_RyRCg","emoji":"play","heat":"★★★★★","proposal":"视觉融合：赛博朋克风","copy":"The future of flavor is already here.","views":"535.1K views"},{"platform":"YouTube","title":"Taylor Swift - The Fate of Strangers (Official Lyric Video)","link":"https://www.youtube.com/watch?v=DylBH3uj6fo","emoji":"play","heat":"★★★☆☆","proposal":"Reels式产品展示","copy":"Built for players who push further.","views":"2.3M views"},{"platform":"YouTube","title":"Every Project is Someone's First","link":"https://www.youtube.com/watch?v=QrZMiS5mTnQ","emoji":"play","heat":"★★★☆☆","proposal":"Reels式产品展示","copy":"Built for players who push further.","views":"4.8M views"},{"platform":"YouTube","title":"Inside Apple's New Product Lab","link":"https://www.youtube.com/watch?v=xYzAbc123","emoji":"play","heat":"★★★☆☆","proposal":"Reels式产品展示","copy":"Built for players who push further.","views":"890K views"},{"platform":"YouTube","title":"GTA VI Official Gameplay Trailer","link":"https://www.youtube.com/watch?v=gmneae5WOjc","emoji":"play","heat":"★★★★★","proposal":"视觉融合：游戏过场风格","copy":"Next Level gear for the next generation.","views":"42M views"},{"platform":"YouTube","title":"Why Everyone's Talking About AI Agents","link":"https://www.youtube.com/watch?v=demo123","emoji":"play","heat":"★★★★★","proposal":"热点二创：AI生成机械结构拆解视频","copy":"Intelligence meets engineering.","views":"1.2M views"},{"platform":"Instagram","title":"viral","link":"https://www.instagram.com/explore/tags/viral/","emoji":"camera","heat":"★★★★★","proposal":"反差梗/Meme格式","copy":"We dont follow trends. We set the pace."},{"platform":"Instagram","title":"trending","link":"https://www.instagram.com/explore/tags/trending/","emoji":"camera","heat":"★★★★☆","proposal":"反差梗/Meme格式","copy":"We dont follow trends. We set the pace."},{"platform":"Instagram","title":"explore","link":"https://www.instagram.com/explore/tags/explore/","emoji":"camera","heat":"★★★★☆","proposal":"POV格式：探索新设备 vs 升级设备","copy":"Best discoveries are builds not places."},{"platform":"Instagram","title":"fyp","link":"https://www.instagram.com/explore/tags/fyp/","emoji":"camera","heat":"★★★★★","proposal":"Meme格式：FYP vs 真品味","copy":"Your feed is loud. Your tank is loud enough."},{"platform":"Instagram","title":"reels","link":"https://www.instagram.com/explore/tags/reels/","emoji":"camera","heat":"★★★★★","proposal":"15秒Reels快节奏产品展示","copy":"Click. Build. Vaporize."},{"platform":"Instagram","title":"fashion","link":"https://www.instagram.com/explore/tags/fashion/","emoji":"camera","heat":"★★★☆☆","proposal":"时尚大片但主角是设备","copy":"The gear in your hand not clothes on you."},{"platform":"Instagram","title":"food","link":"https://www.instagram.com/explore/tags/food/","emoji":"camera","heat":"★★☆☆☆","proposal":"通用标签玩法","copy":"Trending now."},{"platform":"Instagram","title":"travel","link":"https://www.instagram.com/explore/tags/travel/","emoji":"camera","heat":"★★☆☆☆","proposal":"通用标签玩法","copy":"Trending now."},{"platform":"Instagram","title":"fitness","link":"https://www.instagram.com/explore/tags/fitness/","emoji":"camera","heat":"★★☆☆☆","proposal":"通用标签玩法","copy":"Trending now."},{"platform":"Instagram","title":"beauty","link":"https://www.instagram.com/explore/tags/beauty/","emoji":"camera","heat":"★★☆☆☆","proposal":"通用标签玩法","copy":"Trending now."}];
-
-var filterEnabled=true;
-
-function getFilteredCards(cards){
-if(!filterEnabled)return cards;
-return cards.filter(function(c){return !isGenericTag(c.title)});
-}
-
-function renderCards(cards){
-var grid=document.getElementById('cardGrid');
-grid.innerHTML='';
-cards.forEach(function(c){
-var cls=c.platform==='Twitter/X'?'twitter':c.platform==='YouTube'?'youtube':'instagram';
-var viewsHTML=c.views?'<div style="font-size:12px;color:#9ca3af;margin-top:4px">'+c.views+'</div>':'';
-var card=document.createElement('div');
-card.className='card';
-card.setAttribute('data-platform',c.platform);
-card.setAttribute('data-generic',isGenericTag(c.title)?'true':'false');
-card.innerHTML='<div class="card-header"><span class="platform-tag '+cls+'">'+c.platform+'</span><span class="heat">'+c.heat+'</span></div><div class="card-title">'+c.title+'</div><div class="card-proposal">💡 '+c.proposal+'</div><div class="card-copy">'+c.copy+'</div>'+viewsHTML+'<a class="card-link" href="'+c.link+'" target="_blank" rel="noopener">查看原文 →</a>';
-grid.appendChild(card);
-});
-updateStats(cards);
-}
-
-function updateStats(displayed){
-document.getElementById('totalCount').textContent=allCards.length;
-document.getElementById('twitterCount').textContent=allCards.filter(function(c){return c.platform==='Twitter/X'}).length;
-document.getElementById('youtubeCount').textContent=allCards.filter(function(c){return c.platform==='YouTube'}).length;
-document.getElementById('instagramCount').textContent=allCards.filter(function(c){return c.platform==='Instagram'}).length;
-document.getElementById('allCount').textContent=displayed.length;
-}
-
-function filterCards(platform){
-var btns=document.querySelectorAll('.filter-btn');
-btns.forEach(function(b){b.classList.remove('active')});
-event.target.classList.add('active');
-var filtered=getFilteredCards(allCards);
-if(platform==='all'){renderCards(filtered);return}
-var finalFiltered=filtered.filter(function(c){return c.platform===platform});
-renderCards(finalFiltered);
-}
-
-function toggleFilter(){
-filterEnabled=!filterEnabled;
-var sw=document.getElementById('trendSwitch');
-var banner=document.getElementById('filterBanner');
-var msg=document.getElementById('filteredMsg');
-if(filterEnabled){
-sw.classList.add('active');
-banner.classList.remove('hidden');
-}else{
-sw.classList.remove('active');
-banner.classList.add('hidden');
-}
-var displayed=filterEnabled?getFilteredCards(allCards):allCards;
-renderCards(displayed);
-msg.textContent=filterEnabled?'已开启仅显示时效热点':'已显示所有趋势（包含泛标签）';
-}
-
-function showAll(){
-filterEnabled=false;
-var sw=document.getElementById('trendSwitch');
-var banner=document.getElementById('filterBanner');
-var msg=document.getElementById('filteredMsg');
-sw.classList.remove('active');
-banner.classList.add('hidden');
-renderCards(allCards);
-msg.textContent='已显示所有趋势（包含泛标签）';
-}
-
-document.getElementById('timestamp').textContent='数据更新于：'+new Date().toLocaleString('zh-CN');
-var initialFiltered=getFilteredCards(allCards);
-var filteredCount=allCards.length-initialFiltered.length;
-document.getElementById('filteredCount').textContent=filteredCount;
-document.getElementById('filteredMsg').textContent='已自动过滤 '+filteredCount+' 条泛标签';
-renderCards(initialFiltered);
+function toggleSidebar(){var s=document.getElementById('sidebar'),m=document.getElementById('mainContent'),t=document.querySelector('.sidebar-toggle');s.classList.toggle('collapsed');m.classList.toggle('expanded');t.classList.toggle('collapsed')}
+function showAll(){document.querySelectorAll('.trend-card').forEach(function(c){c.style.display=''});document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active')});document.querySelector('[data-platform="all"]').classList.add('active')}
+function toggleGeneric(){var show=document.getElementById('toggleFilter').checked,bl=["viral", "trending", "explore", "fyp", "reels", "followme", "instagood", "photooftheday", "instalike", "beautiful", "love", "art", "happy", "picoftheday", "nature", "cute", "style", "motivation", "fitness", "food", "travel", "selfie", "life", "model", "design", "photography", "illustration", "digitalart", "sketch", "drawing", "painting", "handmade", "craft", "wedding", "baby", "pets", "animals", "sunset", "beach", "mountain", "coffee", "music", "game", "movie", "book", "health", "workout", "gym", "ootd", "outfit", "makeup", "hair", "school", "weekend", "party", "holiday", "newyear", "christmas", "halloween"];cards=document.querySelectorAll('.trend-card');cards.forEach(function(card){var t=card.querySelector('.trend-title');if(t&&bl.some(function(b){return t.textContent.toLowerCase().includes(b)})){card.style.display='none'}else{card.style.display=''}})}
+document.querySelectorAll('.nav-btn').forEach(function(btn){btn.addEventListener('click',function(){var p=this.getAttribute('data-platform');document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active')});this.classList.add('active');if(p==='all'){showAll()}else{document.querySelectorAll('.trend-card').forEach(function(card){card.style.display=card.dataset.platform===p?'':'none'}));})});
+document.querySelectorAll('.sidebar-item').forEach(function(item){item.addEventListener('click',function(){var p=this.getAttribute('data-platform');filterByPlatform(p)})});
 </script>
 </body>
 </html>
