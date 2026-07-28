@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 import os
 from datetime import datetime
@@ -38,14 +39,14 @@ for card in filtered:
 cards_html = ""
 stats_html = ""
 filter_buttons = ""
-emoji_map = {"Twitter/X": "??", "YouTube": "??", "Instagram": "??"}
+emoji_map = {"Twitter/X": "\U0001F426", "YouTube": "\u25B6\uFE0F", "Instagram": "\U0001F4F8"}
 platform_order = ["Twitter/X", "YouTube", "Instagram"]
 
 for platform in platform_order:
     if platform not in platform_groups:
         continue
     pcards = platform_groups[platform]
-    emoji = emoji_map.get(platform, "??")
+    emoji = emoji_map.get(platform, "\U0001F525")
     stats_html = stats_html + '<div class="stat"><div class="num">' + str(len(pcards)) + '</div><div class="label">' + platform + '</div></div>'
     filter_buttons = filter_buttons + '<button class="nav-btn" data-platform="' + platform + '">' + emoji + " " + platform + ' (' + str(len(pcards)) + ')</button>'
     for c in pcards[:20]:
@@ -55,7 +56,7 @@ for platform in platform_order:
         proposal_val = c.get("proposal") or ""
         copy_val = c.get("copy") or ""
         link_val = c.get("link") or "#"
-        heat_val = c.get("heat") or "??°Ó°Ó"
+        heat_val = c.get("heat") or "\u2605\u2605\u2606\u2606\u2606"
         cards_html = cards_html + '<div class="trend-card" data-platform="' + platform + '">'
         cards_html = cards_html + '<div class="card-top">'
         cards_html = cards_html + '<span class="platform-indicator">' + emoji + platform + '</span>'
@@ -65,18 +66,18 @@ for platform in platform_order:
         cards_html = cards_html + '<h3 class="trend-title">' + title_val + '</h3>'
         cards_html = cards_html + '<div class="trend-content">'
         if proposal_val:
-            cards_html = cards_html + '<p class="proposal"><strong>¥¥“‚∑ΩœÚ:</strong>' + proposal_val + '</p>'
+            cards_html = cards_html + '<p class="proposal"><strong>ÂàõÊÑèÊñπÂêë:</strong>' + proposal_val + '</p>'
         if copy_val:
-            cards_html = cards_html + '<p class="copy-text"><em>Œƒ∞∏≤›∏Â:</em> "' + copy_val + '"</p>'
+            cards_html = cards_html + '<p class="copy-text"><em>ÊñáÊ°àËçâÁ®ø:</em> "' + copy_val + '"</p>'
         cards_html = cards_html + '</div>'
-        cards_html = cards_html + '<a href="' + link_val + '" target="_blank" class="view-source-btn">≤Èø¥‘≠Œƒ °˙</a>'
+        cards_html = cards_html + '<a href="' + link_val + '" target="_blank" class="view-source-btn">Êü•ÁúãÂéüÊñá ‚Üí</a>'
         cards_html = cards_html + '</div>'
 
 sidebar_items = ""
 for platform in platform_order:
     if platform not in platform_groups:
         continue
-    emoji = emoji_map.get(platform, "??")
+    emoji = emoji_map.get(platform, "\U0001F525")
     sidebar_items = sidebar_items + '<div class="sidebar-item" data-platform="' + platform + '"><span class="sidebar-icon">' + emoji + '</span><span class="sidebar-label">' + platform + '</span></div>'
 
 h = "<!DOCTYPE html>\n"
@@ -85,7 +86,7 @@ h += '<head>\n'
 h += '<meta charset="UTF-8">\n'
 h += '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
 h += '<title>Hellvape Trend Radar v2.0</title>\n'
-h += '<style>\n'
+h += "<style>\n"
 h += "*{margin:0;padding:0;box-sizing:border-box}\n"
 h += "body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8f9fa;color:#1a1a2e;display:flex;min-height:100vh}\n"
 h += ".sidebar{width:260px;background:#fff;border-right:1px solid #e5e7eb;padding:24px 0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;transition:.3s}\n"
@@ -124,12 +125,12 @@ h += "</style>\n"
 h += "</head>\n"
 h += "<body>\n"
 h += '<button class="sidebar-toggle" onclick="toggleSidebar()">&#9776;</button>\n'
-h += '<div class="sidebar" id="sidebar"><div class="sidebar-header"><h1>?? Hellvape Trend Radar</h1><p>Plugin Architecture v2.0 °§ ' + now + '</p></div>' + sidebar_items + '</div>'
+h += '<div class="sidebar" id="sidebar"><div class="sidebar-header"><h1>&#128269; Hellvape Trend Radar</h1><p>Plugin Architecture v2.0 ¬∑ ' + now + '</p></div>' + sidebar_items + '</div>'
 h += '<div class="main-content" id="mainContent">\n'
 h += '<div class="stats-row">' + stats_html + '</div>\n'
-h += '<div class="timestamp-bar"><span>“—π˝¬À ' + str(generic_count) + ' Ãı∑∫±Í«© | œ‘ æ ' + str(len(filtered)) + ' Ãı”––ß»»µ„ | ∏¸–¬”⁄ ' + now + '</span>\n'
-h += '<label style="white-space:nowrap;font-size:13px"><input type="checkbox" id="toggleFilter" checked onchange="toggleGeneric()">Ωˆœ‘ æ ±–ß»»µ„</label></div>\n'
-h += '<div class="filter-buttons">' + filter_buttons + '<button class="nav-btn" data-platform="all" onclick="showAll()">»´≤ø (' + str(len(cards)) + ')</button></div>\n'
+h += '<div class="timestamp-bar"><span>\u5df2\u8fc7\u6ed7 ' + str(generic_count) + ' \u6761\u6cf9\u6807\u7b7e | \u663e\u793a ' + str(len(filtered)) + ' \u6761\u6709\u6548\u70b9\u7167 | \u66f4\u65b0\u4e8e ' + now + '</span>\n'
+h += '<label style="white-space:nowrap;font-size:13px"><input type="checkbox" id="toggleFilter" checked onchange="toggleGeneric()">\u4ec5\u663e\u793a\u65f6\u6548\u70b9\u7167</label></div>\n'
+h += '<div class="filter-buttons">' + filter_buttons + '<button class="nav-btn" data-platform="all" onclick="showAll()">\u5168\u90e8 (' + str(len(cards)) + ')</button></div>\n'
 h += '<div class="trends-grid">' + cards_html + '</div></div>\n'
 
 js_func_toggleSidebar = "function toggleSidebar(){var s=document.getElementById('sidebar'),m=document.getElementById('mainContent'),t=document.querySelector('.sidebar-toggle');s.classList.toggle('collapsed');m.classList.toggle('expanded');t.classList.toggle('collapsed')}\n"
